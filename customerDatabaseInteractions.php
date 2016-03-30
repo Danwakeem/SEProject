@@ -10,5 +10,6 @@
 		$con = dbConnect();
 		$id = $_SESSION['userId'];
 		//needAssistance
+		$sql = "UPDATE "
 	}
 ?>
