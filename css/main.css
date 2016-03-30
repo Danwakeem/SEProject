@@ -141,6 +141,11 @@ h6, .h6 {
  * Blog posts
  */
 
+ .page-title {
+  margin-top:40px;
+  margin-bottom: 50px;
+ }
+
 .blog-post {
   margin-bottom: 60px;
 }
@@ -151,6 +156,22 @@ h6, .h6 {
 .blog-post-meta {
   margin-bottom: 20px;
   color: #999;
+}
+.clear-notification {
+  float: right;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/*
+ * Table List
+ */
+.table-info{
+  margin-top: 20px;
+}
+
+.view-bill{
+  float:right;
 }
 
 

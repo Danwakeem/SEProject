@@ -4,7 +4,6 @@
 	GLOBAL $con;
 
 	/**
-	 * The return value is not entirly nessicary but I include it anyway
 	 * @return $con
 	 */
 	function dbConnect(){
