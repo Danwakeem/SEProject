@@ -1,3 +1,4 @@
+    </div> <!-- ./container -->
     <footer class="blog-footer">
         <p>Super cafe menu brought to you by the super group.</p>
         <p><a href="#">Back to top</a></p>
@@ -10,9 +11,9 @@
 
     <?php if($userType == 'table') : ?>
         <script>
-            function pubnubAlert(id){
+            function pubnubAlert(id,username){
                 console.log(id);
-                sendMessageFromTable(id);
+                sendMessageFromTable(id,username);
             }
         </script>
     <?php endif; ?>

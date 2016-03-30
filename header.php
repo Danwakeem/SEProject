@@ -33,3 +33,4 @@
                 break;
         }
     ?>
+    <div class="container" style="margin-bottom: 40px;min-height: 700px;">

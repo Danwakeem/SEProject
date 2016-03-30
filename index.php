@@ -11,7 +11,10 @@
 			break;
 		case 'waiter':
 			//Load table list
-			require 'Templates/Waiter/FakeTableList.html';
+			include 'waiterDatabaseInteractions.php';
+			echo '<h1 class="page-title">Your Tables</h1>';
+			$result = getTableList();
+			require 'tableList.php';
 			break;
 		case 'manager':
 			//Load the master table list
