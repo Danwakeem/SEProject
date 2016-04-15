@@ -132,7 +132,10 @@ function updateQuantity(element){
 	id = id.replace("dish","");
 	var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
 	itemCount += qty - orderItems[elementPos].quantity;
+	orderTotal -= orderItems[elementPos].quantity * orderItems[elementPos].price;
+	orderTotal += qty * orderItems[elementPos].price;
 	$('#dropdownTitle').html(itemCount + ' Order <span class="caret"></span>');
+	$('#dishTotal #price').html(orderTotal);
 	if(qty == 0){
 		orderItems.splice(elementPos, 1);
 		$(par).remove();
@@ -140,12 +143,8 @@ function updateQuantity(element){
 			$('#orderDropDown').html('<li id="emptyOrder"><a href="#">Nothing added</a></li>');
 	} else {
 		orderItems[elementPos].quantity = qty;
-		console.log(orderItems);
 	}
 }
-
-//Search array
-var result = $.grep(orderItems, function(e){ return e.id == id; });
 
 //Override dropdown function for twitter bootstrap
 $('.dropdown.keep-open').on({
