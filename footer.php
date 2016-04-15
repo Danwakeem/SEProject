@@ -1,9 +1,20 @@
     </div> <!-- ./container -->
+
+    <div id="warning" class="alert alert-warning messages" role="alert" style="display:none;"> 
+        <strong id="bold">Hold on!</strong> We are sending your order to the kitchen. 
+    </div>
+    <div id="success" class="alert alert-success messages" role="alert" style="display:none;"> 
+        <strong id="bold">Woopie!</strong> Your order was recieved by the kitchen.
+    </div>
+    <div id="danger" class="alert alert-danger messages" role="alert" style="display:none;"> 
+        <strong id="bold">Oh NOOOO!</strong> Your order was lost in the eather. Try Again please.
+    </div>
+
     <footer class="blog-footer">
         <p>Super cafe menu brought to you by the super group.</p>
         <p><a href="#">Back to top</a></p>
     </footer>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="http://cdn.pubnub.com/pubnub-3.14.4.min.js"></script>

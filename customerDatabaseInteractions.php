@@ -4,12 +4,37 @@
     * the database for the waiter
     */
     ob_start();
-	require 'db-connect.php';
+    require 'db-connect.php';
 
-	function updateStatus($message){
+	if(isset($_GET['runTest'])){
+		session_start();
+		$order = $_GET['order'];
+		var_dump(submitOrder($order));
+	}
+
+	function submitOrder($orders) {
 		$con = dbConnect();
-		$id = $_SESSION['userId'];
-		//needAssistance
-		$sql = "UPDATE "
+		$tableId = $_SESSION['userId'];
+		$sql = "INSERT INTO orders (tableId) VALUES (?)";
+		$insertStmt = $con->prepare($sql);
+		$insertStmt->bind_param('s',$tableId);
+		if(!$insertStmt->execute()) {
+			$insertStmt->close();
+			return false;
+		}
+		$orderId = $insertStmt->insert_id;
+		$insertStmt->close();
+		foreach ($orders as $item) {
+			$newSQL = "INSERT INTO orderItems (orderId,menuId) VALUES (?,?)";
+			$insertItem = $con->prepare($newSQL);
+			$insertItem->bind_param('ss',$orderId, $item['id']);
+			if(!$insertItem->execute()){
+				$insertItem->close();
+				return false;
+			}
+			$insertItem->close();
+		}
+		return true;
+		
 	}
 ?>

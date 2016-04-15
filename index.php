@@ -7,7 +7,10 @@
 		case 'table':
 			//Load the menu
 			//This is obviously just a place holder until we actually make this page populate itself using the database
-			require 'Templates/Customer/FakeMenu.html';
+			//require 'Templates/Customer/FakeMenu.html';
+			include 'generalDatabaseInteractions.php';
+			$results = getMenuItems(true);
+			require 'menu.php';
 			break;
 		case 'waiter':
 			//Load table list
