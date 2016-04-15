@@ -7,19 +7,18 @@
    $modify = $_SESSION['userType'] == 'manager' || $_SESSION['userType'] == 'cheff';
 ?>
 
-        <div class="carousel slide" data-ride="carousel" id="carousel-example-captions" style="margin-top: 30px;margin-bottom: 30px; height:450px;">
+        <div class="carousel slide" data-ride="carousel" id="carousel-example-captions" style="margin-bottom:20px;margin-top: 30px;">
             <ol class="carousel-indicators">
                 <?php for($i = 0; $i < $topItems->num_rows; $i++) : ?>
                     <li <?php if($i==0): ?>class="active"<?php endif; ?> data-slide-to="<?php echo $i; ?>" data-target="#carousel-example-captions"></li>
                 <?php endfor; ?>
                 
             </ol>
-            <div class="carousel-inner" role="listbox" style="margin-bottom:20px;height:450px;">
+            <div class="carousel-inner" role="listbox">
                 <?php foreach($topItems as $index => $item) : ?>
                     <div class="item <?php if($index==0) echo 'active'; ?>">
-                        <img data-holder-rendered="true" src="<?php echo $item['path']; ?>"
-                        style="z-index: -99999;">
-                        <div class="carousel-caption" style="top: 310px;">
+                        <div class="thumbnail-slider" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
+                        <div class="carousel-caption">
                             <h3 style="color: white;"><?php echo $item['title']; ?></h3>
                             <p><?php echo $item['desc']; ?></p>
                     </div>
@@ -36,14 +35,14 @@
                     <div class="panel-body">
                         <?php foreach($appetizerItems as $index => $item) : ?>
                             <div class="row">
-                                <div class="col-xs-2">
+                                <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-md-6">
                                     <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
-                                <div class="col-xs-4">
+                                <div class="col-md-4">
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
@@ -64,14 +63,14 @@
                     <div class="panel-body">
                         <?php foreach($lunchItems as $index => $item) : ?>
                             <div class="row">
-                                <div class="col-xs-2">
+                                <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-md-6">
                                     <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
-                                <div class="col-xs-4">
+                                <div class="col-md-4">
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
@@ -90,14 +89,14 @@
                     <div class="panel-body">
                         <?php foreach($entreitems as $index => $item) : ?>
                             <div class="row">
-                                <div class="col-xs-2">
+                                <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-md-6">
                                     <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
-                                <div class="col-xs-4">
+                                <div class="col-md-4">
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
@@ -116,14 +115,14 @@
                     <div class="panel-body">
                         <?php foreach($desertItems as $index => $item) : ?>
                             <div class="row">
-                                <div class="col-xs-2">
+                                <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-md-6">
                                     <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
-                                <div class="col-xs-4">
+                                <div class="col-md-4">
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
@@ -136,15 +135,15 @@
             </div>
         </div><!-- /.accordion -->
         <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Comments for dish: Blah</h4>
+                <h4 class="modal-title" id="commentModalLabel">Comments for dish: Blah</h4>
               </div>
               <div class="modal-body">
-                <textarea id="commentBox" class="form-control" placeholder="If you have any special requests please type them here..." rows="3"></textarea>
+                <textarea id="commentBox" class="form-control" placeholder="If you have any special requests please type them here..." maxlength="250" rows="3"></textarea>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

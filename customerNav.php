@@ -1,11 +1,15 @@
-    <div class="blog-masthead">
+    <div id="custom-bootstrap-menu" class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container dropdown keep-open">
-            <nav class="blog-nav">
-                <ul class="nav navbar-nav">
-                    <li><a class="blog-nav-item active" href="#">Home</a></li> 
-                    <li><a class="blog-nav-item" href="#">About</a></li>
-                    <li><a class="blog-nav-item"href="#">Login</a></li>
-                    <li><a class="blog-nav-item" onclick="pubnubAlert(<?php echo $_SESSION['userId']; ?>,'<?php echo $_SESSION['username']; ?>')" style="cursor: pointer;">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse navbar-menubuilder">
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Login</a></li>
+                    <li><a onclick="pubnubAlert(<?php echo $_SESSION['userId']; ?>,'<?php echo $_SESSION['username']; ?>')" style="cursor: pointer;">
                         <i class="fa fa-user-plus fa-lg"></i> Call Waiter
                     </a></li>
                 </ul>
@@ -17,6 +21,8 @@
                         </ul>
                     </li>
                 </ul>
-            </nav>
+            </div>
         </div>
     </div>
+
+ 

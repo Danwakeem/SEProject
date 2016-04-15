@@ -14,7 +14,7 @@ var newOrderItem44 = '" onchange="updateQuantity(this)" ></div><div class="col-x
 var newOrderItem4 = '</a></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 var newOrderItem5 = '</a></div><div class="col-xs-1"></div></div></li>';
 
-var newOrderItem55 = '</a></div><div class="col-xs-1 dropdown-col-rt"><a class="dropdown-col-rt" data-toggle="modal" data-target="#myModal" onclick="commentObject(this)"><i class="fa fa-comment-o" title="Comments" rel="tooltip" title="Comments" ></i></a></div></div></li>';
+var newOrderItem55 = '</a></div><div class="col-xs-1 dropdown-col-rt"><a class="dropdown-col-rt" data-toggle="modal" data-target="#commentModal" onclick="commentObject(this)"><i class="fa fa-comment-o" title="Comments" rel="tooltip" title="Comments" ></i></a></div></div></li>';
 
 
 $(document).ready(function(){
@@ -113,7 +113,9 @@ function addItemToOrder(id,title,price,path) {
 	} else {
 		var item = inOrder(id);
 		if(item != false){
-			var quantity = '#dish' + id + ' #quantity';
+			item['quantity']++;
+			var listItem = '#dish' + id;
+			var quantityBox = $(listItem).find('#quantity')[0];
 			$(quantity).val(item['quantity']);
 		} else {
 			var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
@@ -133,14 +135,17 @@ function commentObject(element){
 	var id = par[0].id;
 	id = id.replace("dish","");
 	commentItemPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
-	$('#myModalLabel').html('Comments for Dish: ' + orderItems[commentItemPos].title);
+	$('#commentModalLabel').html('Comments for Dish: ' + orderItems[commentItemPos].title);
+	if(orderItems[commentItemPos].notes !== "N/A") {
+		$('#commentBox').val(orderItems[commentItemPos].notes);
+	}
 }
 
 function saveCommentObject() {
 	orderItems[commentItemPos].notes = $('#commentBox').val();
 	console.log(orderItems);
 	$('#commentBox').val(''); //Clear comment box
-	$('#myModal').modal('toggle');
+	$('#commentModal').modal('toggle');
 }
 
 function updateQuantity(element){
