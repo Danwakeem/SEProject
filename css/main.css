@@ -95,11 +95,21 @@ h6, .h6 {
   color: white;
 }
 
+.qty-input {
+  width: 38px;
+  height: 25px;
+  font-size: 12px;
+}
+
 .dropdown-col-rt {
   cursor: default;
   color: white;
   float: right;
   margin-right: 10px;
+}
+
+.edit {
+  cursor: pointer;
 }
 
 .dropdown-col-lt {

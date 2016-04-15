@@ -3,8 +3,12 @@ var orderTotal = 0;
 var itemCount = 0;
 
 var newOrderItem  = '<li id="dish'; //Dish with ID
-var newOrderItem2 = '"><div class="row"><div class="col-xs-6"><a class="dropdown-col-lt">'; //Add Name 
-var newOrderItem3 = '</a></div><div class="col-xs-2"><a id="quantity" class="dropdown-col-rt">'; //Quantity goes here
+var newOrderItem2 = '"><div class="row" style="margin-top:10px;"><div class="col-xs-6"><a class="dropdown-col-lt">'; //Add Name 
+var newOrderItem3 = '</a></div><div class="col-xs-2"><a id="quantity" class="dropdown-col-rt edit">'; //Quantity goes here
+
+var newOrderItem33 = '</a></div><div class="col-xs-2"><input type="text" id="quantity" class="form-control qty-input" min="0" max="15" value="'; //Quantity goes here
+var newOrderItem44 = '" onchange="updateQuantity(this)" ></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
+
 var newOrderItem4 = '</a></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 var newOrderItem5 = '</a></div></div></li>';
 
@@ -95,7 +99,7 @@ function addItemToOrder(id,title,price,path) {
 	if(orderItems.length == 0) {
 		var item = {id:id, title:title, price:price, path:path, quantity:1};
 		orderItems.push(item);
-		var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem3 + 1 + newOrderItem4 + price + newOrderItem5;
+		var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem5;
 		var newItemList = newOrderItem + 'Header' + newOrderItem2 + "Title" + newOrderItem3 + "Qty" + newOrderItem4 + "Price" + newOrderItem5 + '<li role="separator" class="divider"></li>';
 		itemHTML += '<li id="totalDivider" role="separator" class="divider"></li>' + newOrderItem + "Total" + newOrderItem2 + "Total" + newOrderItem3 + "" + newOrderItem4 + price + newOrderItem5 + '<li><div style="width100%;text-align:center;margin-top:10px;"><button style="width:90%;margin:auto 0;" type="button" onclick="submitOrder()" class="btn btn-success">SubmitOrder</button></div></li>';
 		newItemList += itemHTML;
@@ -105,11 +109,11 @@ function addItemToOrder(id,title,price,path) {
 		var item = inOrder(id);
 		if(item != false){
 			var quantity = '#dish' + id + ' #quantity';
-			$(quantity).html(item['quantity']);
+			$(quantity).val(item['quantity']);
 		} else {
 			var item = {id:id, title:title, price:price, path:path, quantity:1};
 			orderItems.push(item);
-			var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem3 + 1 + newOrderItem4 + price + newOrderItem5;
+			var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem5;
 			$('#totalDivider').before(itemHTML);
 
 		}
@@ -121,12 +125,38 @@ function addItemToOrder(id,title,price,path) {
 
 }
 
+function updateQuantity(element){
+	var qty = $(element).val();
+	var par = $(element).parent().parent().parent();
+	var id = par[0].id;  
+	id = id.replace("dish","");
+	var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
+	itemCount += qty - orderItems[elementPos].quantity;
+	$('#dropdownTitle').html(itemCount + ' Order <span class="caret"></span>');
+	if(qty == 0){
+		orderItems.splice(elementPos, 1);
+		$(par).remove();
+		if(orderItems.length === 0)
+			$('#orderDropDown').html('<li id="emptyOrder"><a href="#">Nothing added</a></li>');
+	} else {
+		orderItems[elementPos].quantity = qty;
+		console.log(orderItems);
+	}
+}
+
+//Search array
+var result = $.grep(orderItems, function(e){ return e.id == id; });
+
 //Override dropdown function for twitter bootstrap
 $('.dropdown.keep-open').on({
     "shown.bs.dropdown": function() { this.closable = false; },
     "click":             function() { this.closable = true; },
     "hide.bs.dropdown":  function() { return this.closable; }
 });
+
+function dropDownToggle(){
+	$('#dropdownTitle').addClass('open');
+}
 
 function showOrder() {
 	console.log("showing order");
