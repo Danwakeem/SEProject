@@ -1,5 +1,5 @@
     <div class="blog-masthead">
-        <div class="container">
+        <div class="container dropdown keep-open">
             <nav class="blog-nav">
                 <ul class="nav navbar-nav">
                     <li><a class="blog-nav-item active" href="#">Home</a></li> 

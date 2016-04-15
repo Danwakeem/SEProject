@@ -121,6 +121,13 @@ function addItemToOrder(id,title,price,path) {
 
 }
 
+//Override dropdown function for twitter bootstrap
+$('.dropdown.keep-open').on({
+    "shown.bs.dropdown": function() { this.closable = false; },
+    "click":             function() { this.closable = true; },
+    "hide.bs.dropdown":  function() { return this.closable; }
+});
+
 function showOrder() {
 	console.log("showing order");
 	console.log(orderItems);
