@@ -2,16 +2,24 @@ var orderItems = [];
 var orderTotal = 0;
 var itemCount = 0;
 
+var commentItemPos;
+
 var newOrderItem  = '<li id="dish'; //Dish with ID
-var newOrderItem2 = '"><div class="row" style="margin-top:10px;"><div class="col-xs-6"><a class="dropdown-col-lt">'; //Add Name 
+var newOrderItem2 = '"><div class="row" style="margin-top:10px;"><div class="col-xs-5"><a class="dropdown-col-lt">'; //Add Name 
 var newOrderItem3 = '</a></div><div class="col-xs-2"><a id="quantity" class="dropdown-col-rt edit">'; //Quantity goes here
 
 var newOrderItem33 = '</a></div><div class="col-xs-2"><input type="text" id="quantity" class="form-control qty-input" min="0" max="15" value="'; //Quantity goes here
 var newOrderItem44 = '" onchange="updateQuantity(this)" ></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 
 var newOrderItem4 = '</a></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
-var newOrderItem5 = '</a></div></div></li>';
+var newOrderItem5 = '</a></div><div class="col-xs-1"></div></div></li>';
 
+var newOrderItem55 = '</a></div><div class="col-xs-1 dropdown-col-rt"><a class="dropdown-col-rt" data-toggle="modal" data-target="#myModal" onclick="commentObject(this)"><i class="fa fa-comment-o" title="Comments" rel="tooltip" title="Comments" ></i></a></div></div></li>';
+
+
+$(document).ready(function(){
+	$("[rel='tooltip']").tooltip();
+});
 
 var pubnub = PUBNUB.init({
     publish_key: 'pub-c-31dd9891-4fe2-4e6b-b7c7-412e1ec6bc30',
@@ -86,20 +94,17 @@ function submitOrder(){
 }
 
 function inOrder(id) {
-	for(item in orderItems) {
-		if(orderItems[item]['id'] == id){
-			orderItems[item]['quantity']++;
-			return orderItems[item];
-		} 
-	}
+	var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
+	if(elementPos > -1)
+		return orderItems[elementPos];
 	return false;
 }
 
 function addItemToOrder(id,title,price,path) {
 	if(orderItems.length == 0) {
-		var item = {id:id, title:title, price:price, path:path, quantity:1};
+		var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
 		orderItems.push(item);
-		var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem5;
+		var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem55;
 		var newItemList = newOrderItem + 'Header' + newOrderItem2 + "Title" + newOrderItem3 + "Qty" + newOrderItem4 + "Price" + newOrderItem5 + '<li role="separator" class="divider"></li>';
 		itemHTML += '<li id="totalDivider" role="separator" class="divider"></li>' + newOrderItem + "Total" + newOrderItem2 + "Total" + newOrderItem3 + "" + newOrderItem4 + price + newOrderItem5 + '<li><div style="width100%;text-align:center;margin-top:10px;"><button style="width:90%;margin:auto 0;" type="button" onclick="submitOrder()" class="btn btn-success">SubmitOrder</button></div></li>';
 		newItemList += itemHTML;
@@ -111,18 +116,31 @@ function addItemToOrder(id,title,price,path) {
 			var quantity = '#dish' + id + ' #quantity';
 			$(quantity).val(item['quantity']);
 		} else {
-			var item = {id:id, title:title, price:price, path:path, quantity:1};
+			var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
 			orderItems.push(item);
-			var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem5;
+			var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem55;
 			$('#totalDivider').before(itemHTML);
 
 		}
 	}
 	orderTotal += price;
 	itemCount++;
-	$('#dishTotal #price').html(orderTotal);
-	$('#dropdownTitle').html(itemCount + ' Order <span class="caret"></span>');
+	updateTotalValues();
+}
 
+function commentObject(element){
+	var par = $(element).parent().parent().parent();
+	var id = par[0].id;
+	id = id.replace("dish","");
+	commentItemPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
+	$('#myModalLabel').html('Comments for Dish: ' + orderItems[commentItemPos].title);
+}
+
+function saveCommentObject() {
+	orderItems[commentItemPos].notes = $('#commentBox').val();
+	console.log(orderItems);
+	$('#commentBox').val(''); //Clear comment box
+	$('#myModal').modal('toggle');
 }
 
 function updateQuantity(element){
@@ -130,12 +148,12 @@ function updateQuantity(element){
 	var par = $(element).parent().parent().parent();
 	var id = par[0].id;  
 	id = id.replace("dish","");
+	var item = inOrder(id);
 	var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
-	itemCount += qty - orderItems[elementPos].quantity;
-	orderTotal -= orderItems[elementPos].quantity * orderItems[elementPos].price;
-	orderTotal += qty * orderItems[elementPos].price;
-	$('#dropdownTitle').html(itemCount + ' Order <span class="caret"></span>');
-	$('#dishTotal #price').html(orderTotal);
+	itemCount += qty - item.quantity;
+	orderTotal -= item.quantity * item.price;
+	orderTotal += qty * item.price;
+	updateTotalValues();
 	if(qty == 0){
 		orderItems.splice(elementPos, 1);
 		$(par).remove();
@@ -146,11 +164,21 @@ function updateQuantity(element){
 	}
 }
 
+function updateTotalValues(){
+	$('#dishTotal #price').html(orderTotal);
+	$('#dropdownTitle').html(itemCount + ' Order <span class="caret"></span>');
+}
+
 //Override dropdown function for twitter bootstrap
 $('.dropdown.keep-open').on({
     "shown.bs.dropdown": function() { this.closable = false; },
     "click":             function() { this.closable = true; },
     "hide.bs.dropdown":  function() { return this.closable; }
+});
+
+//Tooltip toggle
+$(function () {
+    $("[data-toggle='tooltip']").tooltip();
 });
 
 function dropDownToggle(){

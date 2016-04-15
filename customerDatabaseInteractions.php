@@ -25,9 +25,9 @@
 		$orderId = $insertStmt->insert_id;
 		$insertStmt->close();
 		foreach ($orders as $item) {
-			$newSQL = "INSERT INTO orderItems (orderId,menuId) VALUES (?,?)";
+			$newSQL = "INSERT INTO orderItems (orderId,menuId,quantity,notes) VALUES (?,?,?,?)";
 			$insertItem = $con->prepare($newSQL);
-			$insertItem->bind_param('ss',$orderId, $item['id']);
+			$insertItem->bind_param('ssss',$orderId, $item['id'], $item['quantity'], $item['notes']);
 			if(!$insertItem->execute()){
 				$insertItem->close();
 				return false;
