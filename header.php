@@ -1,4 +1,12 @@
-<?php session_start(); ?>
+<?php 
+
+session_start(); 
+$userType;
+if(isset($_SESSION['userType'])){
+    $userType = $_SESSION['userType'];
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,20 +25,23 @@
         switch ($userType) {
             case 'table':
                 //Load the customerNav
-                require 'customerNav.php';
+                require_once 'customerDatabaseInteractions.php';
+                $orderExists = existingOrder();
+                require_once 'customerNav.php';
                 break;
             case 'waiter':
                 //Load the waiterNav
-                require 'waiterNav.php';
+                require_once 'waiterNav.php';
                 break;
             case 'manager':
                 //Load the managerNav
                 break;
-            case 'cook':
+            case 'chef':
                 //Load the cookNav
+                require_once 'chefNav.php';
                 break;
             default:
-                require 'customerNav.php';
+                require_once 'customerNav.php';
                 break;
         }
     ?>

@@ -132,6 +132,26 @@ h6, .h6 {
   z-index: 9;
 }
 
+.status-dropdown {
+
+}
+
+.status-dropdown-menu {
+  top: 30px;
+}
+
+.vertical-center {
+  margin-top: 8px;
+}
+
+.middle-align {
+  text-align: center;
+}
+
+.dropdown-red {
+  background-color: #a94442;
+}
+
 /* Active state gets a caret at the bottom */
 .blog-nav .active {
   color: #fff;

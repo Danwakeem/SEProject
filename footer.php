@@ -22,18 +22,27 @@
 
     <?php if($userType == 'table') : ?>
         <script>
-            function pubnubAlert(id,username){
-                console.log(id);
-                sendMessageFromTable(id,username);
-            }
+            var tableId = <?php echo $_SESSION['userId']; ?>;
+            var tableName = "<?php echo $_SESSION['username']; ?>";
         </script>
     <?php endif; ?>
-    <script>
-        $(document).ready(function(){
-            subscribeToTables();
-        });
-    </script>
-
+    <?php if($userType == 'waiter') : ?>
+        <script>
+            var userType = 'waiter';
+            $(document).ready(function(){
+                subscribeToOrderUpdates();
+                subscribeToTableUpdates();
+            });
+        </script>
+    <?php endif; ?>
+    <?php if($userType ==  'chef') :?>
+        <script>
+            var userType = 'chef';
+            $(document).ready(function(){
+               subscribeToTableUpdates(); 
+            });
+        </script>
+    <?php endif; ?>
     <style>
     .tb_button {padding:1px;cursor:pointer;border-right: 1px solid #8b8b8b;border-left: 1px solid #FFF;border-bottom: 1px solid #fff;}.tb_button.hover {borer:2px outset #def; background-color: #f8f8f8 !important;}.ws_toolbar {z-index:100000} .ws_toolbar .ws_tb_btn {cursor:pointer;border:1px solid #555;padding:3px}   .tb_highlight{background-color:yellow} .tb_hide {visibility:hidden} .ws_toolbar img {padding:2px;margin:0px}
     </style>

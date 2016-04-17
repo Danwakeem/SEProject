@@ -19,7 +19,7 @@
 			$stmt->close();
 			exit(header('Location: /SEProject/index.php'));
 		} else {
-			exit(header('Location: /HCI/login.php?error=1'));
+			exit(header('Location: /SEProject/login.php?error=1'));
 		}
 	}
 

@@ -1,6 +1,6 @@
 <?php
 	ob_start();
-	require 'db-connect.php';
+	require_once 'db-connect.php';
 
 	function getMenuItems($activeOnly) {
 		$con = dbConnect();
@@ -42,6 +42,39 @@
 		} else {
 
 		}
+	}
+
+	function updateTableStatus($tableId,$status) {
+		$con = dbConnect();
+		$sql = "UPDATE user SET Status = ? where id = ?";
+		$stmt = $con->prepare($sql);
+		$stmt->bind_param('ss',$status,$tableId);
+		$success = $stmt->execute();
+		$stmt->close();
+		return $success;
+	}
+
+	function updateOrderStatus($orderId,$status) {
+		$con = dbConnect();
+		$sql = "UPDATE orders SET status = ? where id = ?";
+		$stmt = $con->prepare($sql);
+		$stmt->bind_param('ss',$status,$orderId);
+		$success = $stmt->execute();
+		$stmt->close();
+		if($status == "ReadyForDelivery"){
+			$sql = "UPDATE user as u, orders as o SET u.Status = 'OrderReady' where o.tableId = u.id and o.id = ?";
+			$stmt = $con->prepare($sql);
+			$stmt->bind_param('s',$orderId);
+			$success = $stmt->execute();
+			$stmt->close();
+		} else if ($status == "Paid") {
+			$sql = "UPDATE user as u, orders as o SET u.Status = 'Paid' where o.tableId = u.id and o.id = ?";
+			$stmt = $con->prepare($sql);
+			$stmt->bind_param('s',$orderId);
+			$success = $stmt->execute();
+			$stmt->close();
+		}
+		return $success;
 	}
 
 	function getTableList(){
