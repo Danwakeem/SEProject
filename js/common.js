@@ -41,8 +41,8 @@ var statusMessages = {
 	OrderReady:
 	{ msg:' Food is ready ',
 	  class:'alert alert-success table-info',
-	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
-	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
+	  dropDownButtonClass: "btn btn-success dropdown-toggle", 
+	  dropDownMenuClass: "dropdown-menu status-dropdown-menu dropdown-green",
 	  dropDownButtonText: ' Order Ready <span class="caret"></span>',
 	  BillOpen: true
 	},
@@ -57,8 +57,8 @@ var statusMessages = {
 	Paid:
 	{ msg:' Paid and <span class="alert-link">needs to be cleared.</span>',
 	  class:'alert alert-warning table-info',
-	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
-	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
+	  dropDownButtonClass: "btn btn-warning dropdown-toggle", 
+	  dropDownMenuClass: "dropdown-menu status-dropdown-menu dropdown-yellow",
 	  dropDownButtonText: ' Paid <span class="caret"></span>',
 	  BillOpen: false
 	}
@@ -68,7 +68,7 @@ var statusMessages = {
 var newOrderItem  = '<li id="dish'; //Dish with ID
 var newOrderItem2 = '"><div class="row" style="margin-top:10px;"><div class="col-xs-5"><a class="dropdown-col-lt">'; //Add Name 
 var newOrderItem3 = '</a></div><div class="col-xs-2"><a id="quantity" class="dropdown-col-rt edit">'; //Quantity goes here
-var newOrderItem33 = '</a></div><div class="col-xs-2"><input type="text" id="quantity" class="form-control qty-input" min="0" max="15" value="'; //Quantity goes here
+var newOrderItem33 = '</a></div><div class="col-xs-2"><input type="text" data="quantity" class="form-control qty-input" min="0" max="15" value="'; //Quantity goes here
 var newOrderItem44 = '" onchange="updateQuantity(this)" ></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 var newOrderItem4 = '</a></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 var newOrderItem5 = '</a></div><div class="col-xs-1"></div></div></li>';
@@ -365,8 +365,7 @@ function addItemToOrder(id,title,price,path) {
 		if(item != false){
 			item['quantity']++;
 			var listItem = '#dish' + id;
-			var quantityBox = $(listItem).find('#quantity')[0];
-			$(quantity).val(item['quantity']);
+			$(listItem).find('input[data="quantity"]').val(item['quantity']);
 		} else {
 			var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
 			orderItems.push(item);

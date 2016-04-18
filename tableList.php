@@ -48,6 +48,12 @@
 	            				case 'NeedAssistance':
 	            					echo 'danger';
 	            					break;
+	            				case 'OrderReady':
+	            					echo 'success';
+	            					break;
+	            				case 'Paid':
+	            					echo 'warning';
+	            					break;
 	            				default:
 	            					echo 'primary';
 	            					break;
@@ -61,6 +67,12 @@
 	            		 	switch ($row['Status']) {
 	            		 	case 'NeedAssistance':
 	            		 		echo 'dropdown-red';
+	            		 		break;
+	            		 	case 'OrderReady':
+	            		 		echo 'dropdown-green';
+	            		 		break;
+	            		 	case 'Paid':
+	            		 		echo 'dropdown-yellow';
 	            		 		break;
 	            		 	default:
 	            		 		echo '';

@@ -152,6 +152,14 @@ h6, .h6 {
   background-color: #a94442;
 }
 
+.dropdown-green {
+  background-color: #449d44;
+}
+
+.dropdown-yellow{
+  background-color: #d58512;
+}
+
 /* Active state gets a caret at the bottom */
 .blog-nav .active {
   color: #fff;
