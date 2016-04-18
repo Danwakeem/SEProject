@@ -21,7 +21,7 @@
                         </ul>
                     </li>
                     <?php if($orderExists) : ?>
-                        <li><a href="payBillPage.php?tableId=<?php echo $_SESSION['userId'];?>">Pay Bill</a></li>
+                        <li id="payBillLink"><a href="payBillPage.php?tableId=<?php echo $_SESSION['userId'];?>">Pay Bill</a></li>
                     <?php endif; ?>
                 </ul>
             </div>

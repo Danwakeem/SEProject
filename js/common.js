@@ -11,49 +11,56 @@ var statusMessages = {
 	  class:"alert alert-info table-info", 
 	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
 	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
-	  dropDownButtonText: ' Ready <span class="caret"></span>'
+	  dropDownButtonText: ' Ready <span class="caret"></span>',
+	  BillOpen: false
 	},
 	NeedAssistance:
 	{ msg:' This table <a class="alert-link" href="#">requires assistance</a> ',
 	  class:'alert alert-danger table-info',
 	  dropDownButtonClass: "btn btn-danger dropdown-toggle", 
 	  dropDownMenuClass: "dropdown-menu status-dropdown-menu dropdown-red",
-	  dropDownButtonText: ' NeedAssistance <span class="caret"></span>'
+	  dropDownButtonText: ' NeedAssistance <span class="caret"></span>',
+	  BillOpen: true
 	},
 	CreatingOrder:
 	{ msg:' Waiting for table to order ',
 	  class:'alert alert-info table-info',
 	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
 	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
-	  dropDownButtonText: ' CreatingOrder <span class="caret"></span>'
+	  dropDownButtonText: ' CreatingOrder <span class="caret"></span>',
+	  BillOpen: true
 	},
 	WaitingForFood:
 	{ msg:' Waiting for food ',
 	  class:'alert alert-info table-info',
 	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
 	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
-	  dropDownButtonText: ' WaitingForFood <span class="caret"></span>'
+	  dropDownButtonText: ' WaitingForFood <span class="caret"></span>',
+	  BillOpen: true
 	},
 	OrderReady:
 	{ msg:' Food is ready ',
 	  class:'alert alert-success table-info',
 	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
 	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
-	  dropDownButtonText: ' Order Ready <span class="caret"></span>'
+	  dropDownButtonText: ' Order Ready <span class="caret"></span>',
+	  BillOpen: true
 	},
 	FoodDelivered:
 	{ msg:' Waiting For payment ',
 	  class:'alert alert-info table-info',
 	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
 	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
-	  dropDownButtonText: ' FoodDelivered <span class="caret"></span>'
+	  dropDownButtonText: ' FoodDelivered <span class="caret"></span>',
+	  BillOpen: true
 	},
 	Paid:
 	{ msg:' Paid and <span class="alert-link">needs to be cleared.</span>',
 	  class:'alert alert-warning table-info',
 	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
 	  dropDownMenuClass: "dropdown-menu status-dropdown-menu ",
-	  dropDownButtonText: ' Paid <span class="caret"></span>'
+	  dropDownButtonText: ' Paid <span class="caret"></span>',
+	  BillOpen: false
 	}
 }
 
@@ -66,6 +73,16 @@ var newOrderItem44 = '" onchange="updateQuantity(this)" ></div><div class="col-x
 var newOrderItem4 = '</a></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 var newOrderItem5 = '</a></div><div class="col-xs-1"></div></div></li>';
 var newOrderItem55 = '</a></div><div class="col-xs-1 dropdown-col-rt"><a class="dropdown-col-rt" data-toggle="modal" data-target="#commentModal" onclick="commentObject(this)"><i class="fa fa-comment-o" title="Comments" rel="tooltip" title="Comments" ></i></a></div></div></li>'; 
+
+//New orders for chef
+var newChefItem  = '<tr class="orderRow'; //OrderId
+var newChefItem2 = '"><td><div class="checkbox"><label><input class="'; //OrderId
+var newChefItem3 = '" onclick="checkOrderRadios(this)" type="checkbox" value=""></label></div></td><td>'; //Quantity
+var newChefItem4 = '</td><td>'; //Title
+var newChefItem5 = '</td><td>'; //notes
+var newChefItem6 = '</td><td id="tableId" data="'; //TableId
+var newChefItem7 = '">'; //userName
+var newChefItem8 = '</td></tr>';
 
 $(document).ready(function(){
 	$("[rel='tooltip']").tooltip();
@@ -128,11 +145,6 @@ function changeTableStatus(id,status,updateDB) {
 	} else {
 		var updateInfo = statusMessages[status];
 		updateTableUI(updateInfo,id);
-		if(status == 'WaitingForFood'){
-			//Add view bill button
-		} else if(status === 'Paid') {
-			//Remove view bill button
-		}
 	}
 }
 
@@ -161,6 +173,18 @@ function updateTableUI(updateInfo,id){
 	$('#table' + id).removeClass().addClass(updateInfo.class);
 	$('#statusButton' + id).removeClass().addClass(updateInfo.dropDownButtonClass).html(updateInfo.dropDownButtonText);
 	$('#dropDownMenu' + id).removeClass().addClass(updateInfo.dropDownMenuClass);
+
+	if(updateInfo.BillOpen){
+		if($('#viewBillLink').length){
+		} else {
+			var html = '<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?tableId=' + id + '">View Bill ></a></p>';
+			$('#viewBillCol').append(html);
+		}
+	} else {
+		if($('#viewBillLink').length){
+			$('#viewBillLink').remove();
+		}
+	}
 }
 
 /*
@@ -209,16 +233,6 @@ function updateOrderStatus(id,status,successFunction){
 	});	
 }
 
-//New orders for chef
-var newChefItem  = '<tr class="orderRow'; //OrderId
-var newChefItem2 = '"><td><div class="checkbox"><label><input class="'; //OrderId
-var newChefItem3 = '" onclick="checkOrderRadios(this)" type="checkbox" value=""></label></div></td><td>'; //Quantity
-var newChefItem4 = '</td><td>'; //Title
-var newChefItem5 = '</td><td>'; //notes
-var newChefItem6 = '</td><td id="tableId" data="'; //TableId
-var newChefItem7 = '">'; //userName
-var newChefItem8 = '</td></tr>';
-
 function addOrderItems(orderId,order,tableName,tableId){
 	console.log(orderId);
 	for(i in order) {
@@ -246,6 +260,7 @@ function addOrderItems(orderId,order,tableName,tableId){
 		callback : function(m){console.log(m)}
 	});
  	console.log("Paid success");
+ 	window.location.href = 'index.php';
  }
 
 function pubnubAlert(id,username,type){
@@ -302,6 +317,9 @@ function submitOrder(){
 				    message: pubData,
 				    callback : function(m){console.log(m)}
 				});
+
+		  		//Add Pay bill link
+				showPayBillLink();
 
 		  		$('#success').fadeToggle(2000,function(){
 		  			$(this).fadeToggle(2000);
@@ -411,6 +429,15 @@ function resetOrderDropdown() {
 	var userId = $('#userId').attr('data');
 	$('#orderDropDown').html('<li id="emptyOrder"><a href="#">Nothing added</a></li>');
 	$('#orderDropDown').after('<li><a href="payBillPage.php?tableId=' + userId + '>Pay Bill</a></li>');
+}
+
+function showPayBillLink(){
+	var link = '<li id="payBillLink"><a href="payBillPage.php?tableId=' + tableId + '">Pay Bill</a></li>';
+	$('.navbar-right').append(link);
+}
+
+function removePayBillLink() {
+	$('#payBillLink').remove();
 }
 
 //Override dropdown function for twitter bootstrap

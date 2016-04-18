@@ -77,9 +77,9 @@
 	            		 </ul> 
 	            	</div>
 				</div>
-				<div class="col-xs-2">
+				<div id="viewBillCol" class="col-xs-2">
 					<?php if($row['Status'] != 'Paid' && $row['Status'] != 'Ready') : ?>
-						<p class="vertical-center middle-align"><a href="payBillPage.php?tableId=<?php echo $row['id']; ?>">View Bill ></a></p>
+						<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?tableId=<?php echo $row['id']; ?>">View Bill ></a></p>
 					<?php endif; ?>
 				</div>
 			</div>
