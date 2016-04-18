@@ -96,6 +96,21 @@ var pubnub = PUBNUB.init({
     }
 });
 
+function subscribeToWaiterUpdates(){
+	pubnub.subscribe({
+		channel: 'waiterUpdate',
+		message: function(e){
+			if(e.tableId === tableId){
+				$('#callButton').show();
+				$('#waiterWait').remove();
+			}
+		},
+		error: function(error){
+			console.log(JSON.stringify(error));
+		}
+	});
+}
+
 function subscribeToOrderUpdates(){
 	pubnub.subscribe({
 		channel: 'orderUpdate',
@@ -157,6 +172,12 @@ function updateDBTableStatus(updateInfo,data,id){
 		  	console.log(e);
 		  	if(e){
 		  		updateTableUI(updateInfo,id);
+		  		var pubData = {status: 'replace', tableId: id};
+		  		pubnub.publish({
+					channel: 'waiterUpdate',
+					message: pubData,
+					callback : function(m){console.log(m)}
+				});
 		  	} else {
 		  		//Warning flag
 		  	}
@@ -281,6 +302,8 @@ function sendMessageFromTable(id,status){
 				    message: data,
 				    callback : function(m){console.log(m)}
 				});
+				$('#callButton').hide();
+				$('.navbar-left').append('<li id="waiterWait"><a>Waiting for waiter</a></li>')
 		  	}
 		  },
 		  error: function(jqXHR, textStatus, errorThrown) {

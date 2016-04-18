@@ -9,7 +9,7 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="#">About</a></li>
                     <li><a href="#">Login</a></li>
-                    <li><a onclick="pubnubAlert(<?php echo $_SESSION['userId']; ?>,'<?php echo $_SESSION['username']; ?>','NeedAssistance')" style="cursor: pointer;">
+                    <li id="callButton"><a onclick="pubnubAlert(<?php echo $_SESSION['userId']; ?>,'<?php echo $_SESSION['username']; ?>','NeedAssistance')" style="cursor: pointer;">
                         <i class="fa fa-user-plus fa-lg"></i> Call Waiter
                     </a></li>
                 </ul>
