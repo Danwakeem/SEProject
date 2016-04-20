@@ -5,15 +5,34 @@
 	if(isset($_GET['tableId'])){
 		$userId = $_GET['tableId'];
 	}
+	$waiter = false;
+	if(isset($_GET['waiterEdit'])){
+		$waiter = true;
+	}
 
-	echo $userId;
 	$payInfo = getOrderItems($userId);
 	$results = $payInfo['orderItems'];
-	$singleResult = get_object_vars($payInfo['orderItems']->fetch_object());
-	$sum = get_object_vars($payInfo['sum']->fetch_object());
+	$singleResult;
+	$sum = array('sum' => 0.00);
+	if($payInfo['orderItems']->num_rows > 0) {
+		$singleResult = get_object_vars($payInfo['orderItems']->fetch_object());
+		$sum = get_object_vars($payInfo['sum']->fetch_object());
+	}
 
 ?>
-<h1 style=" margin-top: 50px; margin-bottom: 50px;">Final Bill Summary</h1>
+
+<?php if($waiter) : ?>
+	<div class="row" style=" margin-top: 50px; margin-bottom: 50px;">
+		<div class="col-md-6">
+			<h1>Final Bill Summary</h1>
+		</div>
+		<div class="col-md-6">
+			<a href="staffMenu.php?tableId=<?php echo $userId; ?>"><button type="button" class="btn btn-default" style="width:100%;">Add Menu Items</button></a>
+		</div>
+	</div>
+<?php else : ?>
+	<h1 style=" margin-top: 50px; margin-bottom: 50px;">Final Bill Summary</h1>
+<?php endif; ?>
 
 <table class="table table-striped" style=" margin-top: 30px; border-bottom: 1px solid gray;">
 	<thead>

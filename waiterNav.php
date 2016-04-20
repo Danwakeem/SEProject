@@ -11,10 +11,20 @@
             </div>
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
-                    <a class="blog-nav-item active" href="index.php">Table list</a>
-                	<a class="blog-nav-item" href="#">Menu</a> 
-                	<a class="blog-nav-item" href="#">Hello <?php echo $_SESSION['username']; ?></a>
+                    <li><a class="blog-nav-item active" href="index.php">Table list</a></li>
+                	<li><a class="blog-nav-item" href="#">Menu</a></li>
+                	<li><a class="blog-nav-item" href="#">Hello <?php echo $_SESSION['username']; ?></a></li>
                 </ul>
+                <?php if(isset($needsOrderBox)) : ?>
+	                <ul class="nav navbar-nav navbar-right">
+	                    <li class="dropdown">
+	                        <a id="dropdownTitle" href="#" class="dropdown-toggle blog-nav-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">0 Order <span class="caret"></span></a>
+	                        <ul id="orderDropDown" class="dropdown-menu">
+	                            <li id="emptyOrder"><a href="#">Nothing added</a></li>
+	                        </ul>
+	                    </li>
+	                </ul>
+            	<?php endif; ?>
             </div>
         </div>
     </div>

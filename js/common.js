@@ -22,7 +22,7 @@ var statusMessages = {
 	  dropDownButtonText: ' NeedAssistance <span class="caret"></span>',
 	  BillOpen: true
 	},
-	CreatingOrder:
+	WaitingForOrder:
 	{ msg:' Waiting for table to order ',
 	  class:'alert alert-info table-info',
 	  dropDownButtonClass: "btn btn-primary dropdown-toggle", 
@@ -172,7 +172,7 @@ function updateDBTableStatus(updateInfo,data,id){
 		  	console.log(e);
 		  	if(e){
 		  		updateTableUI(updateInfo,id);
-		  		var pubData = {status: 'replace', tableId: id};
+		  		var pubData = {tableId: id};
 		  		pubnub.publish({
 					channel: 'waiterUpdate',
 					message: pubData,

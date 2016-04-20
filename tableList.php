@@ -8,7 +8,7 @@
 			$msg = " Table is ready for customer ";
 			$class = "alert alert-info table-info";
 			$extra = false;
-		} elseif($row['Status'] == "CreatingOrder") {
+		} elseif($row['Status'] == "WaitingForOrder") {
 			$msg = " Waiting for table to order ";
 			$class = "alert alert-info table-info";
 			$extra = false;
@@ -91,7 +91,7 @@
 				</div>
 				<div id="viewBillCol" class="col-xs-2">
 					<?php if($row['Status'] != 'Paid' && $row['Status'] != 'Ready') : ?>
-						<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?tableId=<?php echo $row['id']; ?>">View Bill ></a></p>
+						<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?waiterEdit&tableId=<?php echo $row['id']; ?>">View Bill ></a></p>
 					<?php endif; ?>
 				</div>
 			</div>

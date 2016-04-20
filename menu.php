@@ -4,7 +4,7 @@
    $entreitems = $results['entree'];
    $desertItems = $results['desert'];
    $topItems = $results['top'];
-   $modify = $_SESSION['userType'] == 'manager' || $_SESSION['userType'] == 'cheff';
+   $modify = $_SESSION['userType'] == 'manager' || $_SESSION['userType'] == 'chef';
 ?>
 
         <div class="carousel slide" data-ride="carousel" id="carousel-example-captions" style="margin-bottom:20px;margin-top: 30px;">
