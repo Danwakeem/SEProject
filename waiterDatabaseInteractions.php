@@ -1,11 +1,10 @@
 <?php
-   /**
-    * This is where we can put all of the functions to retrieve things from
-    * the database for the waiter
-    */
     ob_start();
 	require 'db-connect.php';
 
+	/**
+	 * This function get the list of tables for a particular waiter
+	 */
 	function getTableList(){
 		if(isset($_SESSION['userId'])){
 			$con = dbConnect();

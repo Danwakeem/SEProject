@@ -6,16 +6,11 @@
     ob_start();
     require_once 'db-connect.php';
 
-	if(isset($_GET['runTest'])){
-		session_start();
-		if(isset($_GET['order'])){
-			$order = $_GET['order'];
-			var_dump(submitOrder($order));
-		} else if (isset($_GET['tableId'])){
-			var_dump(existingOrder($_GET['tableId']));
-		}
-	}
-
+    /**
+     * function that will submit an order to the database for a customer
+     * @param $orders is an array of order items 
+     * @param $tableId is the id for the table that placed the order
+     */
 	function submitOrder($orders,$tableId) {
 		$con = dbConnect();
 		$sql = "INSERT INTO orders (tableId) VALUES (?)";
@@ -43,6 +38,11 @@
 			return false;
 	}
 
+	/**
+	 * This updates the status for a given table
+	 * @param $status is the new status of the table
+	 * @param $tableId is the id of the table to be updated
+	 */
 	function updateStatus($status,$tableId){
 		$con = dbConnect();
 		$sql = "UPDATE user set Status = ? where id = ?";
@@ -56,6 +56,10 @@
 		}
 	}
 
+	/**
+	 * This function get the order items a customer has submitted
+	 * @param $tableId is the id of the table
+	 */
 	function getOrderItems($tableId){
 		$con = dbConnect();
 		$results = [];

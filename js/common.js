@@ -68,7 +68,7 @@ var statusMessages = {
 var newOrderItem  = '<li id="dish'; //Dish with ID
 var newOrderItem2 = '"><div class="row" style="margin-top:10px;"><div class="col-xs-5"><a class="dropdown-col-lt">'; //Add Name 
 var newOrderItem3 = '</a></div><div class="col-xs-2"><a id="quantity" class="dropdown-col-rt edit">'; //Quantity goes here
-var newOrderItem33 = '</a></div><div class="col-xs-2"><input type="text" data="quantity" class="form-control qty-input" min="0" max="15" value="'; //Quantity goes here
+var newOrderItem33 = '</a></div><div class="col-xs-2"><input type="text" data="quantity" class="form-control qty-input" maxlength="2" value="'; //Quantity goes here
 var newOrderItem44 = '" onchange="updateQuantity(this)" ></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 var newOrderItem4 = '</a></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
 var newOrderItem5 = '</a></div><div class="col-xs-1"></div></div></li>';
@@ -84,10 +84,20 @@ var newChefItem6 = '</td><td id="tableId" data="'; //TableId
 var newChefItem7 = '">'; //userName
 var newChefItem8 = '</td></tr>';
 
+/*
+ * Sad attempt at getting a tool tip to work
+ */
 $(document).ready(function(){
 	$("[rel='tooltip']").tooltip();
 });
 
+/*
+ * PUBNUB
+ */
+
+ /**
+  * PubNub initialization
+  */
 var pubnub = PUBNUB.init({
     publish_key: 'pub-c-31dd9891-4fe2-4e6b-b7c7-412e1ec6bc30',
     subscribe_key: 'sub-c-67f9f974-e10d-11e5-b605-02ee2ddab7fe',
@@ -96,6 +106,9 @@ var pubnub = PUBNUB.init({
     }
 });
 
+/**
+ * WebSocket Subscribe to waiter updates
+ */
 function subscribeToWaiterUpdates(){
 	pubnub.subscribe({
 		channel: 'waiterUpdate',
@@ -111,6 +124,9 @@ function subscribeToWaiterUpdates(){
 	});
 }
 
+/**
+ * WebSocket subscribe to order updates
+ */
 function subscribeToOrderUpdates(){
 	pubnub.subscribe({
 		channel: 'orderUpdate',
@@ -123,6 +139,9 @@ function subscribeToOrderUpdates(){
 	});
 }
 
+/**
+ * WebSocket subscribe to table updates
+ */
 function subscribeToTableUpdates(){
 	pubnub.subscribe({
 		channel: 'tableUpdate',
@@ -140,18 +159,29 @@ function subscribeToTableUpdates(){
 	});
 }
 
+/* End PubNub */
+
 /*
  * Waiter interactions
  */
 
+/*
+ * Absraction for changing the status of a customer that has paid
+ * @param data This is the data passed back from the pubnub notification
+ */
  var customerPaidFunction = function(data) {
  	if(userType === 'waiter') {
- 		console.log(data);
  		changeTableStatus(data['tableId'], data['status'], false);
 
  	}
  }
 
+/**
+ * Abstraction for changin the status of a table.
+ * @param id is the table id
+ * @param status is the new status of the table
+ * @param updateDB is a bool to determine if db needs update 
+ */
 function changeTableStatus(id,status,updateDB) {
 	if(updateDB){
 		var updateInfo = statusMessages[status];
@@ -163,6 +193,12 @@ function changeTableStatus(id,status,updateDB) {
 	}
 }
 
+/**
+ * This is the ajax call that updates the database with a new customer status
+ * @param updateInfo is the new info to be displayed on the screen
+ * @param data is the data to be used in the request
+ * @param id is the id of the table
+ */
 function updateDBTableStatus(updateInfo,data,id){
 	$.ajax({
 		  url: "ajax.php",
@@ -188,6 +224,11 @@ function updateDBTableStatus(updateInfo,data,id){
 	});
 }
 
+/**
+ * This function updates the view for the table whos status was updated
+ * @param updateInfo is the new info to display
+ * @param id is the tableId
+ */
 function updateTableUI(updateInfo,id){
 	console.log("updating UI");
 	$('#msg' + id).html(updateInfo.msg);
@@ -208,10 +249,31 @@ function updateTableUI(updateInfo,id){
 	}
 }
 
+/**
+ * This is supposed to reset a table in an early implementation
+ * @param id is the id of the table
+ * @param username is the username of the table
+ * @depricated
+ */
+function resetTable(id,username){
+	var section = "#table" + id;
+	var findByID = $(section);
+	findByID.removeClass();
+	findByID.addClass('alert alert-info');
+	findByID.empty();
+	findByID.html('<p><strong>'+ username +'</strong> Waiting for table to order <a href="#" style="float:right;">View bill &gt;</a></p>');
+}
+
+/* End Waiter */
+
 /*
  * Chef interactions
  */
 
+/**
+ * This function is an absctracted function to check all of the radio buttons for an entier order
+ * @param element The element is used to get the the class for each item in an order
+ */
 function checkOrderRadios(element) {
 	var classId = $(element).attr('class');
 	if($('.' +classId+':checked').length === $('.'+classId).length){
@@ -219,6 +281,10 @@ function checkOrderRadios(element) {
 	}
 }
 
+/**
+ * This function updates the meal list by removing an order from the list
+ * @param id The id is the order id
+ */
 var updateMealList = function(id) {
 	var collectionOfOrders = $('.orderRow' + id).find('#tableId');
 	var rowOfOrder = collectionOfOrders[0];
@@ -234,6 +300,12 @@ var updateMealList = function(id) {
 	});
 }
 
+/**
+ * This function updates the order status for any given order
+ * @param id is the orderId
+ * @param status is the new status for the order
+ * @param successFucntion is the success call back function
+ */
 function updateOrderStatus(id,status,successFunction){
 	var data = {userAction:"updateOrderStatus", status:status, orderId: id};
 	$.ajax({
@@ -254,8 +326,14 @@ function updateOrderStatus(id,status,successFunction){
 	});	
 }
 
+/**
+ * This function adds a new order to the list view
+ * @param orderId is the id associated with the order
+ * @param order contains the object for each orderItem
+ * @param tableName is the username of the table
+ * @param tableId is the id for that table
+ */
 function addOrderItems(orderId,order,tableName,tableId){
-	console.log(orderId);
 	for(i in order) {
 		var item = order[i];
 		var newItem = newChefItem + orderId + newChefItem2 + orderId + newChefItem3 + item.quantity + newChefItem4 + item.title + newChefItem5 + item.notes + newChefItem6 + tableId + newChefItem7 + tableName + newChefItem8;
@@ -269,11 +347,19 @@ function addOrderItems(orderId,order,tableName,tableId){
  * Customer interactions
  */
 
- function payBill(id){
+/**
+ * This is another abscrated function
+ * @param id The id is the id of the table
+ */
+function payBill(id){
  	updateOrderStatus(id,'Paid',payBillSuccess);
- }
+}
 
- var payBillSuccess = function(id) {
+/**
+ * This is the function that is call back function the customer will use when updating order status
+ * @param id The id is the id of the table
+ */
+var payBillSuccess = function(id) {
  	var dataPub = {tableId: tableId, status: 'Paid'};
 	pubnub.publish({
 		channel: 'tableUpdate',        
@@ -282,12 +368,23 @@ function addOrderItems(orderId,order,tableName,tableId){
 	});
  	console.log("Paid success");
  	window.location.href = 'index.php';
- }
+}
 
+/**
+ * This is an abstracted function for sending a specific notification from the customer
+ * @param id is the id of the table
+ * @param username is the username for the table
+ * @param type is the status message to be sent
+ */
 function pubnubAlert(id,username,type){
 	sendMessageFromTable(id,type);
 }
 
+/**
+ * This allows the user to send a PubNub notification to the wait staff
+ * @param id is the id of the table 
+ * @param status is the alert status from the table
+ */
 function sendMessageFromTable(id,status){
 	var data = {userAction: 'updateTableStatus', tableId: id, status: status};
 	$.ajax({
@@ -312,15 +409,9 @@ function sendMessageFromTable(id,status){
 	});
 }
 
-function resetTable(id,username){
-	var section = "#table" + id;
-	var findByID = $(section);
-	findByID.removeClass();
-	findByID.addClass('alert alert-info');
-	findByID.empty();
-	findByID.html('<p><strong>'+ username +'</strong> Waiting for table to order <a href="#" style="float:right;">View bill &gt;</a></p>');
-}
-
+/**
+ * Customer function for submitting an order
+ */
 function submitOrder(){
 	$('#warning').fadeToggle(1000);
 	var data = {userAction:"submitOrder", order:orderItems};
@@ -366,6 +457,11 @@ function submitOrder(){
 	});
 }
 
+/**
+ * Finds a orderItem in the dictionary
+ * @param id this is the id of a orderItem expected to be in the orderItems dictionary
+ * @return orderItem Object if found or false if not found
+ */
 function inOrder(id) {
 	var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
 	if(elementPos > -1)
@@ -373,7 +469,15 @@ function inOrder(id) {
 	return false;
 }
 
+/**
+ * This function updates the orderItems object and updates the view for the cart accordingly
+ * @param id is the id for the order item
+ * @param title is the title for the order item
+ * @param price os the price for the order item
+ * @param path is the photo path for the order item
+ */
 function addItemToOrder(id,title,price,path) {
+	//If there are no order items we need to create the new look for the basket
 	if(orderItems.length == 0) {
 		var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
 		orderItems.push(item);
@@ -381,28 +485,39 @@ function addItemToOrder(id,title,price,path) {
 		var newItemList = newOrderItem + 'Header' + newOrderItem2 + "Title" + newOrderItem3 + "Qty" + newOrderItem4 + "Price" + newOrderItem5 + '<li role="separator" class="divider"></li>';
 		itemHTML += '<li id="totalDivider" role="separator" class="divider"></li>' + newOrderItem + "Total" + newOrderItem2 + "Total" + newOrderItem3 + "" + newOrderItem4 + price + newOrderItem5 + '<li><div style="width100%;text-align:center;margin-top:10px;"><button style="width:90%;margin:auto 0;" type="button" onclick="submitOrder()" class="btn btn-success">SubmitOrder</button></div></li>';
 		newItemList += itemHTML;
+		orderTotal += price;
+		itemCount++;
 		$('#emptyOrder').remove();
 		$('#orderDropDown').append(newItemList);
 	} else {
+		//Find the items in the dictionary of orderItems
+		//If the item exists we will just update quantity
+		//Else create the order item in the basket
 		var item = inOrder(id);
 		if(item != false){
-			item['quantity']++;
-			var listItem = '#dish' + id;
-			$(listItem).find('input[data="quantity"]').val(item['quantity']);
+			if(item['quantity'] + 1 < 100) {
+				item['quantity']++;
+				var listItem = '#dish' + id;
+				$(listItem).find('input[data="quantity"]').val(item['quantity']);
+				orderTotal += price;
+				itemCount++;
+			}
 		} else {
 			var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
 			orderItems.push(item);
 			var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem55;
 			$('#totalDivider').before(itemHTML);
-
+			orderTotal += price;
+			itemCount++;
 		}
 	}
-	orderTotal += price;
-	itemCount++;
 	updateTotalValues();
-	console.log(orderItems);
 }
 
+/**
+ * Set up the comment box view with the details for the dish they are commenting on
+ * @param element This is the order item comment button and is used to get the orderItem in the dictionary
+ */
 function commentObject(element){
 	var par = $(element).parent().parent().parent();
 	var id = par[0].id;
@@ -414,6 +529,9 @@ function commentObject(element){
 	}
 }
 
+/**
+ * Save the comment to the menuItem dictionary
+ */
 function saveCommentObject() {
 	orderItems[commentItemPos].notes = $('#commentBox').val();
 	console.log(orderItems);
@@ -421,6 +539,11 @@ function saveCommentObject() {
 	$('#commentModal').modal('toggle');
 }
 
+//
+/**
+ * Update the quantity for a given element
+ * @param element This is the order item qunatity box and is used to get the orderItem in the dictionary
+ */
 function updateQuantity(element){
 	var qty = $(element).val();
 	var par = $(element).parent().parent().parent();
@@ -442,42 +565,65 @@ function updateQuantity(element){
 	}
 }
 
+/**
+ * Update the total values display
+ */
 function updateTotalValues(){
 	$('#dishTotal #price').html(orderTotal);
 	$('#dropdownTitle').html(itemCount + ' Order <span class="caret"></span>');
 }
 
+/**
+ * Reset to empty basket view
+ */
 function resetOrderDropdown() {
 	var userId = $('#userId').attr('data');
 	$('#orderDropDown').html('<li id="emptyOrder"><a href="#">Nothing added</a></li>');
 	$('#orderDropDown').after('<li><a href="payBillPage.php?tableId=' + userId + '>Pay Bill</a></li>');
 }
 
+/**
+ * Show the paybill link next to the basket
+ */
 function showPayBillLink(){
 	var link = '<li id="payBillLink"><a href="payBillPage.php?tableId=' + tableId + '">Pay Bill</a></li>';
 	$('.navbar-right').append(link);
 }
 
+/**
+ * Remove the paybill link
+ */
 function removePayBillLink() {
 	$('#payBillLink').remove();
 }
 
-//Override dropdown function for twitter bootstrap
+/**
+ * Override dropdown function for twitter bootstrap
+ */
 $('.dropdown.keep-open').on({
     "shown.bs.dropdown": function() { this.closable = false; },
     "click":             function() { this.closable = true; },
     "hide.bs.dropdown":  function() { return this.closable; }
 });
 
-//Tooltip toggle
+/**
+ * Tooltip toggle
+ */
 $(function () {
     $("[data-toggle='tooltip']").tooltip();
 });
 
+/** 
+ * Toggle the dropdown
+ */
 function dropDownToggle(){
 	$('#dropdownTitle').addClass('open');
 }
 
+/** 
+ * This is a test function to log the orderItems to the js console
+ * @depricated
+ */
 function showOrder() {
 	console.log("showing order");
 	console.log(orderItems);
