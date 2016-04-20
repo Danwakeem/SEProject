@@ -1,18 +1,22 @@
 <?php while($row = $result->fetch_assoc()): ?>
 	<?php 
-		if($row['Status'] == "needAssistance") {
+		if($row['Status'] == "NeedAssistance") {
 			$msg = ' This table <a class="alert-link" href="#">requires assistance</a> ';
 			$class = "alert alert-danger table-info";
 			$extra = true;
 		} elseif($row['Status'] == "Ready") {
+			$msg = " Table is ready for customer ";
+			$class = "alert alert-info table-info";
+			$extra = false;
+		} elseif($row['Status'] == "CreatingOrder") {
 			$msg = " Waiting for table to order ";
 			$class = "alert alert-info table-info";
 			$extra = false;
-		} elseif($row['Status'] == "waitingForFood") {
+		} elseif($row['Status'] == "WaitingForFood") {
 			$msg = " Waiting for food ";
 			$class = "alert alert-success table-info";
 			$extra = false;
-		} elseif($row['Status'] == "paid") {
+		} elseif($row['Status'] == "Paid") {
 			$msg = ' Paid and <span class="alert-link">needs to be cleared.</span>';
 			$class = "alert alert-warning table-info";
 			$extra = false;
