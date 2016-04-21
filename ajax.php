@@ -26,7 +26,7 @@
 					$arr = array('orderId' => $orderId);
 					echo json_encode($arr);
 				} else {
-					echo "false";
+					echo false;
 				}
 			}
 			break;
@@ -38,7 +38,7 @@
 				$updateStatus = updateOrderStatus($orderId,$status);
 				echo $updateStatus;
 			} else {
-				echo "nothing";
+				echo false;
 			}
 			break;
 		case 'updateTableStatus':
@@ -49,14 +49,14 @@
 				$updateStatus = updateTableStatus($tableId,$status);
 				echo $updateStatus;
 			} else {
-				echo 'false';
+				echo false;
 			}
 			break;
 		default:
-			echo "Not an action";
+			echo false;
 			break;
 		}
 	} else {
-		echo "false";
+		echo false;
 	}
 ?>
