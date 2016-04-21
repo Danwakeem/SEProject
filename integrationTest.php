@@ -53,7 +53,6 @@
 			  data: data,
 			  success: function(e){
 			  	$('#wait1').remove();
-			  	console.log(e);
 			  	if(e !== false) {
 			  		$('#test1').append('<p>Test 1 Passed.</p>');
 			  		$('#test1').append('<p>Order was able to be submit properly</p>');
@@ -131,12 +130,13 @@
 			  type: "POST",
 			  data: data,
 			  success: function(e){
+			  	console.log(e);
 			  	$('#wait4').remove();
 				if(e){
 					$('#test4').append('<p>Test 4 Failed.</p>');
 			  		$('#test4').append('<p>Ajax responded to an invalid action</p>');
 				} else {
-					$('#test4').append('<p>Test 4 Failed.</p>');
+					$('#test4').append('<p>Test 4 Passed.</p>');
 			  		$('#test4').append('<p>Invalid action failed</p>');
 				}
 			  },
