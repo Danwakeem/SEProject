@@ -13,7 +13,7 @@
 			break;
 		case 'waiter':
 			//Load table list
-			include 'waiterDatabaseInteractions.php';
+			require_once 'waiterDatabaseInteractions.php';
 			echo '<h1 class="page-title">Your Tables</h1>';
 			$result = getTableList();
 			require_once 'tableList.php';
