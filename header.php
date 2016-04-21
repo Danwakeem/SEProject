@@ -1,7 +1,6 @@
 <?php 
 
 session_start(); 
-require_once 'dbConnect.php';
 $userType;
 if(isset($_SESSION['userType'])){
     $userType = $_SESSION['userType'];
