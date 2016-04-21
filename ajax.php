@@ -3,6 +3,7 @@
 	error_reporting(E_ALL);
 	
 	session_start();
+	require_once 'dbConnect.php';
 
 	/**
 	 * This file contains the actions that can be performed via an ajax request from a clients browser. I am going to call the different actions params.

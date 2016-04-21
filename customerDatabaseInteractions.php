@@ -99,12 +99,12 @@
 		$stmt = $con->prepare($sql);
 		$stmt->bind_param('s', $tableId);
 		if($stmt->execute()){
-			$stmt->store_result();
-			if($stmt->num_rows > 0){
-				$stmt->close();
-				return true;
+			$results = $stmt->get_result();
+			$stmt->close();
+			$arr = $results->fetch_array(MYSQLI_ASSOC);
+			if(isset($arr['id'])) {
+				return $arr['id'];
 			} else {
-				$stmt->close();
 				return false;
 			}
 		} else {
