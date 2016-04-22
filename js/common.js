@@ -477,41 +477,49 @@ function inOrder(id) {
  * @param path is the photo path for the order item
  */
 function addItemToOrder(id,title,price,path) {
-	//If there are no order items we need to create the new look for the basket
-	if(orderItems.length == 0) {
-		var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
-		orderItems.push(item);
+	var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
+	var firstItem = orderItems.length === 0;
+	console.log(firstItem);
+	if(orderItems.length === 0) { 
+		$('#emptyOrder').remove(); 
 		var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem55;
 		var newItemList = newOrderItem + 'Header' + newOrderItem2 + "Title" + newOrderItem3 + "Qty" + newOrderItem4 + "Price" + newOrderItem5 + '<li role="separator" class="divider"></li>';
 		itemHTML += '<li id="totalDivider" role="separator" class="divider"></li>' + newOrderItem + "Total" + newOrderItem2 + "Total" + newOrderItem3 + "" + newOrderItem4 + price + newOrderItem5 + '<li><div style="width100%;text-align:center;margin-top:10px;"><button style="width:90%;margin:auto 0;" type="button" onclick="submitOrder()" class="btn btn-success">SubmitOrder</button></div></li>';
 		newItemList += itemHTML;
-		orderTotal += price;
-		itemCount++;
-		$('#emptyOrder').remove();
 		$('#orderDropDown').append(newItemList);
-	} else {
-		//Find the items in the dictionary of orderItems
-		//If the item exists we will just update quantity
-		//Else create the order item in the basket
-		var item = inOrder(id);
-		if(item != false){
-			if(item['quantity'] + 1 < 100) {
-				item['quantity']++;
-				var listItem = '#dish' + id;
-				$(listItem).find('input[data="quantity"]').val(item['quantity']);
-				orderTotal += price;
-				itemCount++;
-			}
-		} else {
-			var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
-			orderItems.push(item);
-			var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem55;
-			$('#totalDivider').before(itemHTML);
-			orderTotal += price;
-			itemCount++;
-		}
+	}
+	var data = addItemToOrderStructure(item);
+	if(data.inList === true){
+		var listItem = '#dish' + id;
+		$(listItem).find('input[data="quantity"]').val(data.item.quantity);
+	} else if(!firstItem && data.added === true) {
+		var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem55;
+		$('#totalDivider').before(itemHTML);
 	}
 	updateTotalValues();
+}
+
+/**
+ * Function that manages the updates to the orderItems data structure
+ * @param item is the object to be inserted into the structure
+ */
+function addItemToOrderStructure(item) {
+	var returnStructure = {inList: false,added:true};
+	var existingItem = inOrder(item.id);
+	if(existingItem != false) {
+		if(existingItem.quantity + 1 < 100) {
+			returnStructure.inList = true;
+			returnStructure.id = existingItem.id;
+			existingItem.quantity++;
+			returnStructure.item = existingItem;
+		}
+		returnStructure.added = false;
+	} else {
+		orderItems.push(item);
+	}
+	orderTotal += item.price;
+	itemCount++;
+	return returnStructure;
 }
 
 /**

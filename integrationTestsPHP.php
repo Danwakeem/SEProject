@@ -238,7 +238,7 @@
 		 * Test 7.2 : Check that order is showing up in db
 		 */
 		echo '*********** Begin Test 7.2 ***********<br>';
-		$success = getOrders($tableId);
+		$success = testExistingOrder($tableId);
 		if($success != false) {
 			echo 'Test 7.2 Passed<br>';
 			echo 'The order was able to be retrieved from the database<br>';
