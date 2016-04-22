@@ -502,6 +502,7 @@ function addItemToOrder(id,title,price,path) {
 /**
  * Function that manages the updates to the orderItems data structure
  * @param item is the object to be inserted into the structure
+ * @return object {inList: bool, added: bool, id:(optional), item:(optional)}
  */
 function addItemToOrderStructure(item) {
 	var returnStructure = {inList: false,added:true};
@@ -512,8 +513,9 @@ function addItemToOrderStructure(item) {
 			returnStructure.id = existingItem.id;
 			existingItem.quantity++;
 			returnStructure.item = existingItem;
+		} else {
+			returnStructure.added = false;
 		}
-		returnStructure.added = false;
 	} else {
 		orderItems.push(item);
 	}
@@ -552,24 +554,34 @@ function saveCommentObject() {
  * Update the quantity for a given element
  * @param element This is the order item qunatity box and is used to get the orderItem in the dictionary
  */
-function updateQuantity(element){
+function updateQuantity(element) {
 	var qty = $(element).val();
 	var par = $(element).parent().parent().parent();
 	var id = par[0].id;  
 	id = id.replace("dish","");
+	var data = updateQuantityInStructure(id,qty);
+	updateTotalValues();
+	if(data === true) {
+		$(par).remove();
+		if(orderItems.length === 0)
+			$('#orderDropDown').html('<li id="emptyOrder"><a href="#">Nothing added</a></li>');
+	}
+	console.log(orderItems);
+}
+
+function updateQuantityInStructure(id,qty) {
+	var returnStructure = {removed: false, error: false};
 	var item = inOrder(id);
 	var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
 	itemCount += qty - item.quantity;
 	orderTotal -= item.quantity * item.price;
 	orderTotal += qty * item.price;
-	updateTotalValues();
-	if(qty == 0){
+	if(qty == 0) {
 		orderItems.splice(elementPos, 1);
-		$(par).remove();
-		if(orderItems.length === 0)
-			$('#orderDropDown').html('<li id="emptyOrder"><a href="#">Nothing added</a></li>');
+		return true;
 	} else {
 		orderItems[elementPos].quantity = qty;
+		return false;
 	}
 }
 
