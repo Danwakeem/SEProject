@@ -131,7 +131,6 @@
 			  type: "POST",
 			  data: data,
 			  success: function(e){
-			  	console.log(e);
 			  	$('#wait4').remove();
 				if(e){
 					$('#test4').append('<p>Test 4 Failed.</p>');
