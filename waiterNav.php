@@ -12,7 +12,6 @@
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a class="blog-nav-item active" href="index.php">Table list</a></li>
-                	<li><a class="blog-nav-item" href="#">Menu</a></li>
                 	<li><a class="blog-nav-item" href="#">Hello <?php echo $_SESSION['username']; ?></a></li>
                 </ul>
                 <?php if(isset($needsOrderBox)) : ?>
@@ -29,3 +28,4 @@
         </div>
     </div>
     <div id="userId" data="<?php echo $_SESSION['userId']; ?>" style="display: none;"></div>
+    <div id="userType" data="<?php echo $_SESSION['userType']; ?>" style="display: none;"></div>

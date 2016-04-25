@@ -1,6 +1,7 @@
 var orderItems = [];
 var orderTotal = 0;
 var itemCount = 0;
+var editingMenu = false;
 
 var commentItemPos;
 
@@ -239,7 +240,7 @@ function updateTableUI(updateInfo,id){
 	if(updateInfo.BillOpen){
 		if($('#viewBillLink').length){
 		} else {
-			var html = '<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?tableId=' + id + '">View Bill ></a></p>';
+			var html = '<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?waiterEdit&tableId=' + id + '">View Bill ></a></p>';
 			$('#viewBillCol').append(html);
 		}
 	} else {
@@ -411,10 +412,11 @@ function sendMessageFromTable(id,status){
 
 /**
  * Customer function for submitting an order
+ * NOTE: tableId is a global var in the footer for customers
  */
 function submitOrder(){
 	$('#warning').fadeToggle(1000);
-	var data = {userAction:"submitOrder", order:orderItems};
+	var data = {userAction:"submitOrder", order:orderItems, tableId: tableId};
 	$.ajax({
 		  url: "ajax.php",
 		  type: "POST",
@@ -424,7 +426,6 @@ function submitOrder(){
 		  	if(e !== false){
 		  		//Notify waiter and Chef
 		  		var obj = JSON.parse(e);
-		  		console.log(e['orderId']);
 		  		var pubData = {orderId: obj['orderId'], tableId: tableId, status: 'WaitingForFood', order: orderItems, tableName: tableName};
 		  		pubnub.publish({
 				    channel: 'tableUpdate',        

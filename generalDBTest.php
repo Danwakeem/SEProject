@@ -1,10 +1,13 @@
 <?php
-	include 'generalDatabaseInteractions.php';
-	$orderId = 34;
-	$status = "ReadyForDelivery";
+	session_start();
+	session_unset();
+	require_once 'customerDatabaseInteractions.php';
+	$tableId = 3;
+	$_SESSION['userId'] = 3;
 
-	$out = updateOrderStatus($orderId,$status);
-	var_dump($out);
+	$v = existingOrder();
+
+	var_dump($v);
 
 
 ?>

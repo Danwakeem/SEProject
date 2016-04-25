@@ -20,7 +20,7 @@
 			require_once 'customerDatabaseInteractions.php';
 			if(isset($_POST['order'])){
 				$order = $_POST['order'];
-				$tableId = $_SESSION['userId'];
+				$tableId = $_POST['tableId'];
 				$orderId = submitOrder($order,$tableId);
 				if($orderId != false){
 					$arr = array('orderId' => $orderId);

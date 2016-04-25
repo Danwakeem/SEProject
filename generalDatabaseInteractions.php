@@ -44,6 +44,17 @@
 		}
 	}
 
+	function getTableName($tableId) {
+		$con = dbConnect();
+		$sql = "SELECT username from user where id = ?";
+		$stmt = $con->prepare($sql);
+		$stmt->bind_param('s',$tableId);
+		$stmt->execute();
+		$results = $stmt->get_result();
+		$stmt->close();
+		return $results->fetch_assoc();
+	}
+
 	function updateTableStatus($tableId,$status) {
 		$con = dbConnect();
 		$sql = "UPDATE user SET Status = ? where id = ?";
