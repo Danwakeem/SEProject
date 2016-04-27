@@ -4,6 +4,14 @@
 	
 	session_start();
 
+	/**
+	 * This file contains the actions that can be performed via an ajax request from a clients browser. I am going to call the different actions params.
+	 * @param submitOrder submits an order to the database
+	 * @param updateOrderStatus updates the status of an order
+	 * @param updateTableStatus updates the status of a table
+	 * @return false if an error occured in the database transaction
+	 * @return object if success
+	 */
 
 	if(isset($_POST['userAction'])){
 		$userAction = $_POST['userAction'];
@@ -18,7 +26,7 @@
 					$arr = array('orderId' => $orderId);
 					echo json_encode($arr);
 				} else {
-					echo "false";
+					echo false;
 				}
 			}
 			break;
@@ -28,9 +36,9 @@
 				$orderId = $_POST['orderId'];
 				$status = $_POST['status'];
 				$updateStatus = updateOrderStatus($orderId,$status);
-				return $updateStatus;
+				echo $updateStatus;
 			} else {
-				return "nothing";
+				echo false;
 			}
 			break;
 		case 'updateTableStatus':
@@ -39,16 +47,16 @@
 				$tableId = $_POST['tableId'];
 				$status = $_POST['status'];
 				$updateStatus = updateTableStatus($tableId,$status);
-				return $updateStatus;
+				echo $updateStatus;
 			} else {
-				return 'false';
+				echo false;
 			}
 			break;
 		default:
-			echo "Not an action";
+			echo false;
 			break;
 		}
 	} else {
-		echo "false";
+		echo false;
 	}
 ?>
