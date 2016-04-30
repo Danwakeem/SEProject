@@ -6,13 +6,15 @@
 	                <span class="icon-bar"></span>
 	                <span class="icon-bar"></span>
 	                <span class="icon-bar"></span>
+	                <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="index.php"><?php echo $_SESSION['username']; ?></a>
             </div>
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a class="blog-nav-item active" href="index.php">Table list</a></li>
-                	<li><a class="blog-nav-item" href="#">Menu</a></li>
+                	<li><a class="blog-nav-item" href="#">Wait Staff</a></li>
+                	<li><a class="blog-nav-item" href="#">Reports</a></li>
                 	<li><a class="blog-nav-item" href="#">Hello <?php echo $_SESSION['username']; ?></a></li>
                 </ul>
                 <?php if(isset($needsOrderBox)) : ?>

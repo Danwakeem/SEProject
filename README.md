@@ -2,6 +2,8 @@
 
 This will be our super cool repo where we can build our project.
 
+> *Current Status :* So I wrote all of the integration and unit tests and I think we are ready to start writing the paper. I will create a google doc for it and start working tomorrow. 
+
 ## Statues for different entities
 
 * Statues for Orders
