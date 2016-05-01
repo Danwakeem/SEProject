@@ -21,7 +21,13 @@
 		case 'manager':
 			//Load the master table list
 			//For now I am just going to automatically take them to the upload file page
-			require_once 'staffMenuItemMaker.php';
+			//require_once 'staffMenuItemMaker.php';
+			require_once 'managerDatabaseInteractions.php';
+			echo '<h1 class = "page-title"> All Tables</h1>';
+			$result = getMasterTableList();
+			//$staffResult = getWaitStaff(); 
+			//kitchResult = getKitchenStaff();//not sure what the plan is to navigate to pages that are not table lists
+			require_once 'tableList.php';
 			break;
 		case 'chef':
 			//Load the list orders
