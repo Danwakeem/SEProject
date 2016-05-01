@@ -20,6 +20,8 @@
 			break;
 		case 'manager':
 			//Load the master table list
+			//For now I am just going to automatically take them to the upload file page
+			require_once 'staffMenuItemMaker.php';
 			break;
 		case 'chef':
 			//Load the list orders

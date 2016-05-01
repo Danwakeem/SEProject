@@ -30,6 +30,17 @@
 				}
 			}
 			break;
+		case 'updateMenuItems':
+			if(isset($_POST['menuItems'])){
+				require_once 'generalDatabaseInteractions.php';
+				if(isset($_POST['menuItems'])){
+					$menuItems = $_POST['menuItems'];
+					$success = updateMenuItems($menuItems);
+				}
+				$results = getMenuItems(true);
+				require_once 'menu.php';
+			}
+			break;
 		case 'updateOrderStatus':
 			require_once 'generalDatabaseInteractions.php';
 			if(isset($_POST['status']) && isset($_POST['orderId'])){

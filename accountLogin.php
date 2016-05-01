@@ -5,9 +5,9 @@
 
 	if(isset($_GET["username"]) && isset($_GET["password"])){
 		if(login($_GET['username'],$_GET['password'])){
-			exit(header('Location: /SEProject/index.php'));
+			exit(header('Location: index.php'));
 		} else {
-			exit(header('Location: /SEProject/login.php?error=1'));
+			exit(header('Location: login.php?error=1'));
 		}
 	}
 

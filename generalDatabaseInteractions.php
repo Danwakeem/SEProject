@@ -4,6 +4,7 @@
 
 	function getMenuItems($activeOnly) {
 		$con = dbConnect();
+		$sqlApp = ''; $sqlLunch = ''; $sqlDinner = ''; $sqlDesert = ''; $sqlTopItems = '';
 		if($activeOnly) {
 			$resultArray = array();
 
@@ -12,7 +13,6 @@
 			$sqlDinner = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p, menuItemCategory as mc, category as c where mi.active = 1 and mi.id = p.menuItemId and mi.id = mc.menuItemId and mc.categoryId = c.id and c.name = 'Entree'";
 			$sqlDesert = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p, menuItemCategory as mc, category as c where mi.active = 1 and mi.id = p.menuItemId and mi.id = mc.menuItemId and mc.categoryId = c.id and c.name = 'Desert'";
 			$sqlTopItems = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p where mi.active = 1 and mi.id = p.menuItemId order by mi.timesOrdered desc limit 3";
-
 			$stmtApp = $con->prepare($sqlApp);
 			$stmtApp->execute();
 			$resultArray['app'] = $stmtApp->get_result();
@@ -37,11 +37,58 @@
 			$stmtTop->execute();
 			$resultArray['top'] = $stmtTop->get_result();
 			$stmtTop->close();
-
-			return $resultArray;
 		} else {
-
+			$sql = "SELECT id,title,`desc`,price,active from menuItems";
+			$stmt = $con->prepare($sql);
+			$stmt->execute();
+			$resultArray['all'] = $stmt->get_result();
+			$stmt->close();
 		}
+
+		return $resultArray;
+	}
+
+	function getMenuItem($itemId){
+		$con = dbConnect();
+		$resultArray = array();
+		$sql = "SELECT id,title,price,`desc` from menuItems where id = ?";
+		$menuItem = $con->prepare($sql);
+		$menuItem->bind_param('s',$itemId);
+		$menuItem->execute();
+		$resultArray['menuItem'] = $menuItem->get_result()->fetch_assoc();;
+		$menuItem->close();
+		$sql = "SELECT categoryId from menuItemCategory where menuItemId = ?";
+		$categories = $con->prepare($sql);
+		$categories->bind_param('s',$itemId);
+		$categories->execute();
+		$resultArray['categories'] = $categories->get_result();
+		$categories->close();
+		$sql = "SELECT ingredient from ingredients where menuItemId = ?";
+		$ingredient = $con->prepare($sql);
+		$ingredient->bind_param('s',$itemId);
+		$ingredient->execute();
+		$resultArray['ingredients'] = $ingredient->get_result();
+		$ingredient->close();
+		$sql = "SELECT `path` from pictures where menuItemId = ?";
+		$pic = $con->prepare($sql);
+		$pic->bind_param('s',$itemId);
+		$pic->execute();
+		$resultArray['pic'] = $pic->get_result()->fetch_assoc();
+		$pic->close();
+		return $resultArray;
+	}
+
+	function updateMenuItems($orderItems){
+		$con = dbConnect();
+		$success = false;
+		foreach ($orderItems as $id => $value) {
+			$sql = "UPDATE menuItems set active = ? where id = ?";
+			$stmt = $con->prepare($sql);
+			$stmt->bind_param('dd',$value,$id);
+			$success = $stmt->execute();
+			$stmt->close();
+		}
+		return $success;
 	}
 
 	function getTableName($tableId) {

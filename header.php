@@ -35,6 +35,7 @@ if(isset($_SESSION['userType'])){
                 break;
             case 'manager':
                 //Load the managerNav
+                require_once 'managerNav.php';
                 break;
             case 'chef':
                 //Load the cookNav
