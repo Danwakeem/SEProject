@@ -27,7 +27,9 @@
 ?>
 
 <script>
-	var tableId = <?php echo $tableId; ?>
+	var tableName = '<?php echo getTableName($tableId)['username']; ?>'
+	var tableId = '<?php echo $tableId; ?>';
+	editingMenu = true;
 </script>
 
 <?php include 'footer.php'; ?>

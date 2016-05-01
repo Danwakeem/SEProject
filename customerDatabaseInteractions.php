@@ -12,16 +12,22 @@
      * @param $tableId is the id for the table that placed the order
      */
 	function submitOrder($orders,$tableId) {
+		//Check if they have an open order
+		$orderId = findCurrentOrder($tableId)['id'];
 		$con = dbConnect();
-		$sql = "INSERT INTO orders (tableId) VALUES (?)";
-		$insertStmt = $con->prepare($sql);
-		$insertStmt->bind_param('s',$tableId);
-		if(!$insertStmt->execute()) {
+		if($orderId == false){
+			$sql = "SELECT id from orders where tableId = ? and status != 'Paid'";
+
+			$sql = "INSERT INTO orders (tableId) VALUES (?)";
+			$insertStmt = $con->prepare($sql);
+			$insertStmt->bind_param('s',$tableId);
+			if(!$insertStmt->execute()) {
+				$insertStmt->close();
+				return false;
+			}
+			$orderId = $insertStmt->insert_id;
 			$insertStmt->close();
-			return false;
 		}
-		$orderId = $insertStmt->insert_id;
-		$insertStmt->close();
 		foreach ($orders as $item) {
 			$newSQL = "INSERT INTO orderItems (orderId,menuId,quantity,notes) VALUES (?,?,?,?)";
 			$insertItem = $con->prepare($newSQL);
@@ -88,23 +94,27 @@
 	}
 
 	function existingOrder(){
-		$val = findCurrentOrder();
-		return $val;
+		$tableId = $_SESSION['userId'];
+		$val = findCurrentOrder($tableId);
+		if($val != false) {
+			return true;
+		}
+		else {
+			return $val;
+		}
 	}
 
-	function findCurrentOrder(){
+	function findCurrentOrder($tableId){
 		$con = dbConnect();
-		$tableId = $_SESSION['userId'];
 		$sql = "SELECT id from orders where tableId = ? and status != 'Paid'";
 		$stmt = $con->prepare($sql);
 		$stmt->bind_param('s', $tableId);
 		if($stmt->execute()){
-			$stmt->store_result();
-			if($stmt->num_rows > 0){
-				$stmt->close();
-				return true;
+			$res = $stmt->get_result();
+			$stmt->close();
+			if($res->num_rows > 0){
+				return $res->fetch_assoc();
 			} else {
-				$stmt->close();
 				return false;
 			}
 		} else {

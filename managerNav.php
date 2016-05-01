@@ -6,16 +6,15 @@
 	                <span class="icon-bar"></span>
 	                <span class="icon-bar"></span>
 	                <span class="icon-bar"></span>
-	                <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="index.php"><?php echo $_SESSION['username']; ?></a>
             </div>
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a class="blog-nav-item active" href="index.php">Table list</a></li>
+                    <li><a class="blog-nav-item active" href="menuEditor.php">Menu Editor</a></li>
                 	<li><a class="blog-nav-item" href="#">Wait Staff</a></li>
                 	<li><a class="blog-nav-item" href="#">Reports</a></li>
-                	<li><a class="blog-nav-item" href="#">Hello <?php echo $_SESSION['username']; ?></a></li>
                 </ul>
                 <?php if(isset($needsOrderBox)) : ?>
 	                <ul class="nav navbar-nav navbar-right">
@@ -31,3 +30,7 @@
         </div>
     </div>
     <div id="userId" data="<?php echo $_SESSION['userId']; ?>" style="display: none;"></div>
+<<<<<<< HEAD
+    <div id="userType" data="<?php echo $_SESSION['userType']; ?>" style="display: none;"></div>
+=======
+>>>>>>> develop

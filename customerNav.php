@@ -28,5 +28,6 @@
         </div>
     </div>
     <div id="userId" data="<?php echo $_SESSION['userId']; ?>" style="display: none;"></div>
+    <div id="userType" data="<?php echo $_SESSION['userType']; ?>" style="display: none;"></div>
 
  

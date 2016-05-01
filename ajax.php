@@ -20,7 +20,7 @@
 			require_once 'customerDatabaseInteractions.php';
 			if(isset($_POST['order'])){
 				$order = $_POST['order'];
-				$tableId = $_SESSION['userId'];
+				$tableId = $_POST['tableId'];
 				$orderId = submitOrder($order,$tableId);
 				if($orderId != false){
 					$arr = array('orderId' => $orderId);
@@ -28,6 +28,17 @@
 				} else {
 					echo false;
 				}
+			}
+			break;
+		case 'updateMenuItems':
+			if(isset($_POST['menuItems'])){
+				require_once 'generalDatabaseInteractions.php';
+				if(isset($_POST['menuItems'])){
+					$menuItems = $_POST['menuItems'];
+					$success = updateMenuItems($menuItems);
+				}
+				$results = getMenuItems(true);
+				require_once 'menu.php';
 			}
 			break;
 		case 'updateOrderStatus':

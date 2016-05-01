@@ -1,6 +1,7 @@
 var orderItems = [];
 var orderTotal = 0;
 var itemCount = 0;
+var editingMenu = false;
 
 var commentItemPos;
 
@@ -124,6 +125,19 @@ function subscribeToWaiterUpdates(){
 	});
 }
 
+function subscribeToMenuUpdates(){
+	pubnub.subscribe({
+		channel: 'menuUpdate',
+		message: function(e){
+			//Find menu items and remove
+			$( "#menu" ).replaceWith(e);
+		},
+		error: function(error){
+			console.log(JSON.stringify(error));
+		}
+	});	
+}
+
 /**
  * WebSocket subscribe to order updates
  */
@@ -160,6 +174,57 @@ function subscribeToTableUpdates(){
 }
 
 /* End PubNub */
+
+/*
+ * Manager interactions
+ */
+
+ function checkBoxChange(el) {
+ 	var id = $(el).attr('data');
+    if(el.checked) {
+    	menuEditorItems[id] = 1;
+    } else {
+    	menuEditorItems[id] = 0;
+    }
+    var keys = Object.keys(menuEditorItems);
+    console.log(keys.length);
+}
+
+function saveMenuItemChanges(){
+	var keys = Object.keys(menuEditorItems);
+	console.log(menuEditorItems);
+	if(keys.length > 0){
+		var data = {userAction:'updateMenuItems',menuItems:menuEditorItems};
+		$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	console.log(e);
+		  	if(e){
+		  		//Show message
+		  		$('#success-menu-edit').fadeToggle(2000,function(){
+		  			$(this).fadeToggle(2000);
+		  		}).delay(1000);
+
+		  		pubnub.publish({
+		  			channel: 'menuUpdate',
+		  			message: e,
+		  			callback:function(e){console.log(e);}
+		  		})	
+		  	} else {
+		  		//Warning flag
+		  		$('#danger-menu-edit').fadeToggle(2000,function(){
+		  			$(this).fadeToggle(2000);
+		  		}).delay(1000);
+		  	}
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+		});
+	}
+}
 
 /*
  * Waiter interactions
@@ -239,7 +304,7 @@ function updateTableUI(updateInfo,id){
 	if(updateInfo.BillOpen){
 		if($('#viewBillLink').length){
 		} else {
-			var html = '<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?tableId=' + id + '">View Bill ></a></p>';
+			var html = '<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?waiterEdit&tableId=' + id + '">View Bill ></a></p>';
 			$('#viewBillCol').append(html);
 		}
 	} else {
@@ -347,6 +412,20 @@ function addOrderItems(orderId,order,tableName,tableId){
  * Customer interactions
  */
 
+ function searchAndDestroy(menuItems){
+ 	console.log(menuItems);
+ 	for(itemId in menuItems){
+ 		var object = $('.menuItemRow' + itemId);
+ 		console.log(object);
+ 		if(object.constructor === Array){
+
+ 		} else {
+ 			if(menuItems[itemId] === 0)
+ 				$(object).hide();
+ 		}
+ 	}
+ }
+
 /**
  * This is another abscrated function
  * @param id The id is the id of the table
@@ -411,10 +490,11 @@ function sendMessageFromTable(id,status){
 
 /**
  * Customer function for submitting an order
+ * NOTE: tableId is a global var in the footer for customers
  */
 function submitOrder(){
 	$('#warning').fadeToggle(1000);
-	var data = {userAction:"submitOrder", order:orderItems};
+	var data = {userAction:"submitOrder", order:orderItems, tableId: tableId};
 	$.ajax({
 		  url: "ajax.php",
 		  type: "POST",
@@ -424,7 +504,6 @@ function submitOrder(){
 		  	if(e !== false){
 		  		//Notify waiter and Chef
 		  		var obj = JSON.parse(e);
-		  		console.log(e['orderId']);
 		  		var pubData = {orderId: obj['orderId'], tableId: tableId, status: 'WaitingForFood', order: orderItems, tableName: tableName};
 		  		pubnub.publish({
 				    channel: 'tableUpdate',        

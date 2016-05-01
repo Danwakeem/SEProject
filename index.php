@@ -20,6 +20,8 @@
 			break;
 		case 'manager':
 			//Load the master table list
+			//For now I am just going to automatically take them to the upload file page
+			//require_once 'staffMenuItemMaker.php';
 			require_once 'managerDatabaseInteractions.php';
 			echo '<h1 class = "page-title"> All Tables</h1>';
 			$result = getMasterTableList();

@@ -6,7 +6,7 @@
    $topItems = $results['top'];
    $modify = $_SESSION['userType'] == 'manager' || $_SESSION['userType'] == 'chef';
 ?>
-
+    <div id="menu">
         <div class="carousel slide" data-ride="carousel" id="carousel-example-captions" style="margin-bottom:20px;margin-top: 30px;">
             <ol class="carousel-indicators">
                 <?php for($i = 0; $i < $topItems->num_rows; $i++) : ?>
@@ -34,7 +34,7 @@
                 <div aria-expanded="true" aria-labelledby="headingOne" class="panel-collapse collapse in" id="collapseOne" role="tabpanel">
                     <div class="panel-body">
                         <?php foreach($appetizerItems as $index => $item) : ?>
-                            <div class="row">
+                            <div class="row menuItemRow<?php echo $item['id']; ?>">
                                 <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
@@ -46,9 +46,7 @@
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
-                            <?php if($index != count($appetizerItems) - 1) : ?>
-                                <hr>
-                            <?php endif; ?>
+                            <hr class="menuItemRow<?php echo $item['id']; ?>">
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -62,7 +60,7 @@
                 <div aria-expanded="false" aria-labelledby="headingTwo"class="panel-collapse collapse" id="collapseTwo" role="tabpanel" style="height: 0px;">
                     <div class="panel-body">
                         <?php foreach($lunchItems as $index => $item) : ?>
-                            <div class="row">
+                            <div class="row menuItemRow<?php echo $item['id']; ?>">
                                 <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
@@ -74,9 +72,7 @@
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
-                            <?php if($index != count($appetizerItems) - 1) : ?>
-                                <hr>
-                            <?php endif; ?>
+                            <hr class="menuItemRow<?php echo $item['id']; ?>">
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -88,7 +84,7 @@
                 <div aria-expanded="false" aria-labelledby="headingThree" class="panel-collapse collapse" id="collapseThree" role="tabpanel" style="height: 0px;">
                     <div class="panel-body">
                         <?php foreach($entreitems as $index => $item) : ?>
-                            <div class="row">
+                            <div class="row menuItemRow<?php echo $item['id']; ?>">
                                 <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
@@ -100,9 +96,7 @@
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
-                            <?php if($index != count($appetizerItems) - 1) : ?>
-                                <hr>
-                            <?php endif; ?>
+                            <hr class="menuItemRow<?php echo $item['id']; ?>">
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -114,7 +108,7 @@
                 <div aria-expanded="false" aria-labelledby="headingFour"class="panel-collapse collapse" id="collapseFour" role="tabpanel">
                     <div class="panel-body">
                         <?php foreach($desertItems as $index => $item) : ?>
-                            <div class="row">
+                            <div class="row menuItemRow<?php echo $item['id']; ?>">
                                 <div class="col-md-2">
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
@@ -126,9 +120,7 @@
                                     <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
                                 </div>
                             </div>
-                            <?php if($index != count($appetizerItems) - 1) : ?>
-                                <hr>
-                            <?php endif; ?>
+                            <hr class="menuItemRow<?php echo $item['id']; ?>">
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -152,3 +144,4 @@
             </div>
           </div>
         </div>
+    </div>

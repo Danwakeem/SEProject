@@ -47,7 +47,7 @@
 		}
 
 		function testOrderSubmit(){
-			var data = {userAction:"submitOrder",order: [{id:1,quantity:2,notes:'No Cheese'},{id:2,quantity:1,notes:'N/A'}]};
+			var data = {userAction:"submitOrder",order: [{id:1,quantity:2,notes:'No Cheese'},{id:2,quantity:1,notes:'N/A'}], tableId: 3};
 			$.ajax({
 			  url: "ajax.php",
 			  type: "POST",
