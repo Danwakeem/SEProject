@@ -6,7 +6,7 @@
             </div>
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="/">Incoming Meals</a></li>
+                    <li><a href="index.php">Incoming Meals</a></li>
                     <li><a href="menuEditor.php">Menu Editor</a></li>
                     <li><a href="#">Hello <?php echo $_SESSION['username']; ?></a></li>
                 </ul>
