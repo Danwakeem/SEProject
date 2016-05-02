@@ -3,7 +3,6 @@
 	require_once 'managerDatabaseInteractions.php';
 	$result = getAssignedTables();
 	$waitresult = getWaitStaff();
-	var_dump($result->fetch_assoc());
 	echo "<h1 class='page-title'>Assign Tables</h1>"; ?>
 	<?php while($row = $result->fetch_assoc()):?>
 		<div class="alert alert-info table-info" role="alert">
