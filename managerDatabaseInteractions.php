@@ -69,4 +69,15 @@
 			}
 		}
 
+		function getWaiterName($id){
+			$con = dbConnect();
+			$sql = "SELECT username from user where id = ?";
+			$stmt = $con->prepare($sql);
+			$stmt->bind_param('s',$id);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$stmt->close();
+			return $result->fetch_assoc();
+		}
+
 ?>
