@@ -161,10 +161,11 @@ function subscribeToTableUpdates(){
 		channel: 'tableUpdate',
 		message: function(e){
 			if(userType === 'waiter') {
-				changeTableStatus(e['tableId'],e['status'],false);
+				updateTableList();
+				//changeTableStatus(e['tableId'],e['status'],false);
 			} else if (userType === 'chef' && e['status'] === 'WaitingForFood') {
-				console.log(e['orderId']);
-				addOrderItems(e['orderId'],e['order'],e['tableName'],e['tableId']);
+				updateOrderList();
+				//addOrderItems(e['orderId'],e['order'],e['tableName'],e['tableId']);
 			}
 		},
 		error: function(error){
@@ -256,6 +257,21 @@ function changeTableStatus(id,status,updateDB) {
 		var updateInfo = statusMessages[status];
 		updateTableUI(updateInfo,id);
 	}
+}
+
+function updateTableList(){
+	var data = {userAction: 'getTableList'};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	$('#tableList').replaceWith(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});
 }
 
 /**
@@ -389,6 +405,24 @@ function updateOrderStatus(id,status,successFunction){
  			console.log(textStatus, errorThrown);
 		  }
 	});	
+}
+
+function updateOrderList(){
+	console.log("UPDATING ORDER LIST");
+	var data = {userAction: 'getOrderList'};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	console.log($('#orderList'));
+		  	console.log(e);
+		  	$('#orderList').replaceWith(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});		
 }
 
 /**

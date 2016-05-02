@@ -41,6 +41,16 @@
 				require_once 'menu.php';
 			}
 			break;
+		case 'getOrderList':
+			require_once 'chefDatabaseInteractions.php';
+			$results = getOrders();
+			require_once 'mealList.php';
+			break;
+		case 'getTableList':
+			require_once 'waiterDatabaseInteractions.php';
+			$result = getTableList();
+			require_once 'tableList.php';
+			break;
 		case 'updateOrderStatus':
 			require_once 'generalDatabaseInteractions.php';
 			if(isset($_POST['status']) && isset($_POST['orderId'])){
