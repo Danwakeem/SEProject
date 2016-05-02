@@ -247,7 +247,7 @@ function saveMenuItemChanges(){
  * @param status is the new status of the table
  * @param updateDB is a bool to determine if db needs update 
  */
-changeTableStatus(id,status,updateDB) {
+function changeTableStatus(id,status,updateDB) {
 	if(updateDB){
 		var updateInfo = statusMessages[status];
 		var data = {userAction:'updateTableStatus',status:status,tableId:id};
@@ -256,6 +256,7 @@ changeTableStatus(id,status,updateDB) {
 		var updateInfo = statusMessages[status];
 		updateTableUI(updateInfo,id);
 	}
+}
 
 /**
  * This is the ajax call that updates the database with a new customer status
