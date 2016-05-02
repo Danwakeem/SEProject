@@ -28,7 +28,7 @@
 				$sql = "SELECT u.id, u.username FROM user as u WHERE u.userType='waiter'";
 				$stmt = $con->prepare($sql);
 				$stmt->execute();
-				$result = $ssmt->get_result();
+				$result = $stmt->get_result();
 				$stmt->close();
 				return $result;
 			}
@@ -44,7 +44,26 @@
 				$sql = "SELECT u.id, u.username FROM user as u WHERE u.userType='chef'";
 				$stmt = $con->prepare($sql);
 				$stmt->execute();
-				$result = $ssmt->get_result();
+				$result = $stmt->get_result();
+				$stmt->close();
+				return $result;
+			}
+		}
+		function getAssignedTables(){
+			if(isset($_SESSION['userId']) && isset($_SESSION['userType'])){
+				if($_SESSION['userType'] != 'manager'){
+					return false;
+				}
+				$con = dbConnect();
+				$userId = $_SESSION['userId'];
+				$sql = "SELECT user.id, user.username, user.userType, userTables.userID 
+						FROM user 
+						LEFT JOIN userTables 
+						ON user.id=userTables.tableID 
+						WHERE user.userType='table'";
+				$stmt = $con->prepare($sql);
+				$stmt->execute();
+				$result = $stmt->get_result();
 				$stmt->close();
 				return $result;
 			}

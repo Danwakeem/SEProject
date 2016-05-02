@@ -13,7 +13,7 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li><a class="blog-nav-item active" href="index.php">Table list</a></li>
                     <li><a class="blog-nav-item active" href="menuEditor.php">Menu Editor</a></li>
-                	<li><a class="blog-nav-item" href="#">Wait Staff</a></li>
+                	<li><a class="blog-nav-item" href="tableAssigner.php">Assign Tables</a></li>
                 	<li><a class="blog-nav-item" href="#">Reports</a></li>
                 </ul>
                 <?php if(isset($needsOrderBox)) : ?>

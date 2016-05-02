@@ -26,7 +26,7 @@
     return false;
   }
 ?>
-<form action="<?php if($results!=false){echo 'updateMenuItem.php?'];}else{echo 'uploadMenuItem.php'; } ?>" method="post" enctype="multipart/form-data">
+<form action="<?php if($results!=false){echo 'updateMenuItem.php?';}else{echo 'uploadMenuItem.php'; } ?>" method="post" enctype="multipart/form-data">
   <div class="row">
     <div class="col-xs-6">
       <div class="form-group">
