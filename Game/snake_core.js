@@ -11,6 +11,8 @@ var lvl_width = 20;
 var lvl_height = 20;
 var speed = 16;
 var win_prize = false;
+var coupon_applied = false;
+var coupon_checked = false;
 
 snakeHeadImage = new Image();
 snakeHeadImage.src = "resources/head.png";
@@ -49,6 +51,7 @@ var the_date = new Date();
 var test1 = the_date.getTime();
 var stamp = the_date.getTime() + 250;
 
+
 function animate() 
 {
 	the_date = new Date();
@@ -68,12 +71,18 @@ function animate()
 	}
 	else
 	{
+		if(!coupon_checked && win_prize){
+			checkCouponStatus();
+		}
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		
-		if(win_prize == true)
+
+		if(win_prize == true && loggedIn == true)
 		{
 			displayText("Game Over, your score is: " + (snakeLen-4));
-			context.fillText("Congrats, you won a coupon!", 50, 100)
+			if(coupon_applied == true){
+				context.fillText("Congrats, you won a coupon!", 50, 100);
+			}
 		}
 		else
 		{
@@ -89,6 +98,28 @@ function animate()
 	  animate();
 	});
 } 
+
+function checkCouponStatus(){
+	var data = {userAction: 'wonCoupon', customerId: customerId};
+	$.ajax({
+		  url: "../ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	coupon_checked = true;
+		  	console.log(e);
+		  	if(e == 1){
+		  		console.log('success');
+		  		coupon_applied = true;
+		  	} else {
+				console.log('fail');
+		  	}
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});
+}
 
 function displayText(what)
 {

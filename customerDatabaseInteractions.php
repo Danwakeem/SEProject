@@ -93,6 +93,36 @@
 
 	}
 
+	function checkCouponStatus($id) {
+		$con = dbConnect();
+		$sql = "SELECT coupon from user where id = ? and coupon = true";
+		$stmt = $con->prepare($sql);
+		$stmt->bind_param('s',$id);
+		$stmt->execute();
+		$results = $stmt->get_result()->fetch_assoc();
+		$stmt->close();
+		if($results['coupon']){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function setCouponStatus($id,$status = true){
+		$con = dbConnect();
+		$sql = "UPDATE user set coupon = ? where id = ?";
+		$stmt = $con->prepare($sql);
+		$stmt->bind_param('is',$status,$id);
+		$stmt->execute();
+		$result = $stmt->affected_rows;
+		$stmt->close();
+		if($result > 0){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	function existingOrder(){
 		$tableId = $_SESSION['userId'];
 		$val = findCurrentOrder($tableId);

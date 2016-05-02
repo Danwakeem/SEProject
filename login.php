@@ -21,7 +21,7 @@
     <div class="container">
 
       <div class="container">
-      <form class="form-signin" method="get" action="accountLogin.php">
+      <form class="form-signin" method="get" action="<?php echo isset($_GET['customer']) ? 'customerAccountLogin.php' : 'accountLogin.php'; ?>">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label class="sr-only">Email address</label>
         <input type="username" id="inputUsername" name="username" class="form-control" placeholder="username" required autofocus>

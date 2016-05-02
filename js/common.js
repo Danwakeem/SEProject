@@ -117,6 +117,7 @@ function subscribeToWaiterUpdates(){
 			if(e.tableId === tableId){
 				$('#callButton').show();
 				$('#waiterWait').remove();
+				logoutCustomer();
 			}
 		},
 		error: function(error){
@@ -408,7 +409,6 @@ function updateOrderStatus(id,status,successFunction){
 }
 
 function updateOrderList(){
-	console.log("UPDATING ORDER LIST");
 	var data = {userAction: 'getOrderList'};
 	$.ajax({
 		  url: "ajax.php",
@@ -445,6 +445,21 @@ function addOrderItems(orderId,order,tableName,tableId){
 /*
  * Customer interactions
  */
+
+ function logoutCustomer(){
+ 	var data = {userAction: 'logoutCustomer'};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	$('#custom-bootstrap-menu').replaceWith(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});		
+ }
 
  function searchAndDestroy(menuItems){
  	console.log(menuItems);
