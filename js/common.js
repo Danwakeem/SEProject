@@ -685,8 +685,11 @@ function resetOrderDropdown() {
  * Show the paybill link next to the basket
  */
 function showPayBillLink(){
-	var link = '<li id="payBillLink"><a href="payBillPage.php?tableId=' + tableId + '">Pay Bill</a></li>';
-	$('.navbar-right').append(link);
+	if($('#payBillLink').length){
+	}else {
+		var link = '<li id="payBillLink"><a href="payBillPage.php?tableId=' + tableId + '">Pay Bill</a></li>';
+		$('.navbar-right').append(link);
+	}
 }
 
 /**
