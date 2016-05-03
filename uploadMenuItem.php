@@ -1,6 +1,6 @@
 <?php
-
-var_dump($_POST);
+ini_set('display_errors',1);
+error_reporting(E_ALL);
 
 $returnArray = array('imageUploaded' => false);
 $target_dir = "assets/";
@@ -19,17 +19,13 @@ if(isset($_POST["submit"])) {
     }
 }
 // Check if file already exists
-if (file_exists($target_file) || ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") || ($_FILES["fileToUpload"]["size"] > 500000)) {
-
+if (file_exists($target_file) || ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif")) {
     $uploadOk = 0;
 }
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk != 0) {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         $returnArray['imageUploaded'] = true;
-        var_dump($returnArray);
-    } else {
-        var_dump($returnArray);
     }
 }
 
@@ -75,14 +71,15 @@ if($returnArray['imageUploaded'] === true) {
             if($ingred){
                 $ingreds = explode(",", $_POST['ingred']);
                 foreach($ingreds as $ing){
-                    $sql = "INSERT INTO ingredients (menuItemId,ingredient) VALUES (?,?)";
+                    $parts = explode(":",$ing);
+                    $sql = "INSERT INTO ingredients (menuItemId,ingredient,amount) VALUES (?,?,?)";
                     $ingredient = $con->prepare($sql);
-                    $ingredient->bind_param('ss',$menuItemId,$ing);
+                    $ingredient->bind_param('sss',$menuItemId,$parts[0],$parts[1]);
                     $ingredient->execute();
                     $ingredient->close();
                 }
             }
-            exit(header('Location: index.php'));
+            exit(header('Location: menuEditor.php?uploaded'));
         }
 
 
@@ -94,8 +91,7 @@ if($returnArray['imageUploaded'] === true) {
     }
 
 } else {
-    $args .= $returnArray['imageUploaded'] ? '' : '&image';
+    $args = $returnArray['imageUploaded'] ? '' : '&image';
     exit(header('Location: staffMenuItemMaker.php' . $args));
 }
-
 ?>

@@ -12,6 +12,7 @@
 			$sqlLunch = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p, menuItemCategory as mc, category as c where mi.active = 1 and mi.id = p.menuItemId and mi.id = mc.menuItemId and mc.categoryId = c.id and c.name = 'Lunch'";
 			$sqlDinner = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p, menuItemCategory as mc, category as c where mi.active = 1 and mi.id = p.menuItemId and mi.id = mc.menuItemId and mc.categoryId = c.id and c.name = 'Entree'";
 			$sqlDesert = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p, menuItemCategory as mc, category as c where mi.active = 1 and mi.id = p.menuItemId and mi.id = mc.menuItemId and mc.categoryId = c.id and c.name = 'Desert'";
+			$sqlDrinks = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p, menuItemCategory as mc, category as c where mi.active = 1 and mi.id = p.menuItemId and mi.id = mc.menuItemId and mc.categoryId = c.id and c.name = 'Drink'";
 			$sqlTopItems = "SELECT mi.id,mi.title,mi.desc,p.path,mi.price from menuItems as mi, pictures as p where mi.active = 1 and mi.id = p.menuItemId order by mi.timesOrdered desc limit 3";
 			$stmtApp = $con->prepare($sqlApp);
 			$stmtApp->execute();
@@ -32,6 +33,11 @@
 			$stmtDesert->execute();
 			$resultArray['desert'] = $stmtDesert->get_result();
 			$stmtDesert->close();
+
+			$stmtDrink = $con->prepare($sqlDrinks);
+			$stmtDrink->execute();
+			$resultArray['drinks'] = $stmtDrink->get_result();
+			$stmtDrink->close();
 
 			$stmtTop = $con->prepare($sqlTopItems);
 			$stmtTop->execute();
@@ -55,7 +61,7 @@
 		$menuItem = $con->prepare($sql);
 		$menuItem->bind_param('s',$itemId);
 		$menuItem->execute();
-		$resultArray['menuItem'] = $menuItem->get_result()->fetch_assoc();;
+		$resultArray['menuItem'] = $menuItem->get_result()->fetch_assoc();
 		$menuItem->close();
 		$sql = "SELECT categoryId from menuItemCategory where menuItemId = ?";
 		$categories = $con->prepare($sql);
@@ -63,7 +69,7 @@
 		$categories->execute();
 		$resultArray['categories'] = $categories->get_result();
 		$categories->close();
-		$sql = "SELECT ingredient from ingredients where menuItemId = ?";
+		$sql = "SELECT ingredient,amount from ingredients where menuItemId = ?";
 		$ingredient = $con->prepare($sql);
 		$ingredient->bind_param('s',$itemId);
 		$ingredient->execute();

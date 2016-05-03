@@ -38,12 +38,12 @@
 			break;
 		default:
 			//Redirect to login on error
-			exit(header('Location: /SEProject/login.php'));
+			exit(header('Location: login.php'));
 			break;
 		}
 	} else {
 		//Redirect to login if this devce has not been signed in
-		exit(header('Location: /SEProject/login.php'));
+		exit(header('Location: login.php'));
 	}
 	require_once 'footer.php';
 ?>

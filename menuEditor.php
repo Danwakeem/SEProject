@@ -3,6 +3,11 @@
 	require_once 'generalDatabaseInteractions.php';
 	$results = getMenuItems(false);
 	echo '<h1 class="page-title">Menu items</h1>';
+
+	$customerRefresh = false;
+	if(isset($_GET['uploaded'])){
+		$customerRefresh = true;
+	}
 ?>
 	<div id="success-menu-edit" class="alert alert-success messages" role="alert" style="display:none;"> 
         <strong id="bold">Alright Alright.</strong> Your changes were saved
@@ -19,10 +24,15 @@
 			<button type="button" onclick="saveMenuItemChanges()" class="btn btn-primary" style="width:100%;margin-top:10px;margin-bottom:10px;">Save Changes</button>
 		</div>
 	</div>
-	<script>
-		var menuEditorItems = {};
-	</script>
 <?php 
 	require_once 'menuItemsEditor.php';
 	include_once 'footer.php';
 ?>
+<script>
+		var menuEditorItems = {};
+		<?php if($customerRefresh) : ?>
+			$(document).ready(function () {
+			  publishMenuUpdate();
+			});
+		<?php endif; ?>
+	</script>
