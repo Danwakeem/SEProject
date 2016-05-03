@@ -31,15 +31,15 @@
 			}
 			break;
 		case 'updateMenuItems':
+			require_once 'generalDatabaseInteractions.php';
 			if(isset($_POST['menuItems'])){
-				require_once 'generalDatabaseInteractions.php';
 				if(isset($_POST['menuItems'])){
 					$menuItems = $_POST['menuItems'];
 					$success = updateMenuItems($menuItems);
 				}
-				$results = getMenuItems(true);
-				require_once 'menu.php';
 			}
+			$results = getMenuItems(true);
+			require_once 'menu.php';
 			break;
 		case 'getOrderList':
 			require_once 'chefDatabaseInteractions.php';
@@ -81,6 +81,11 @@
 			} else {
 				echo false;
 			}
+			break;
+
+		case 'showMenuItemDetail':
+			$itemId = $_POST['itemId'];
+			require_once 'foodDetail.php';
 			break;
 		case 'updateTableStatus':
 			require_once 'generalDatabaseInteractions.php';

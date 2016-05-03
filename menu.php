@@ -3,6 +3,7 @@
    $lunchItems = $results['lunch'];
    $entreitems = $results['entree'];
    $desertItems = $results['desert'];
+   $drinkItems = $results['drinks'];
    $topItems = $results['top'];
    $modify = $_SESSION['userType'] == 'manager' || $_SESSION['userType'] == 'chef';
 ?>
@@ -39,7 +40,7 @@
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
+                                    <h3><a onclick="showDetail(<?php echo $item['id']; ?>)"><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></a></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
                                 <div class="col-md-4">
@@ -65,7 +66,7 @@
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
+                                    <h3><a onclick="showDetail(<?php echo $item['id']; ?>)"><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></a></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
                                 <div class="col-md-4">
@@ -89,7 +90,7 @@
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
+                                    <h3><a onclick="showDetail(<?php echo $item['id']; ?>)"><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></a></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
                                 <div class="col-md-4">
@@ -113,7 +114,31 @@
                                     <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h3><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></h3>
+                                    <h3><a onclick="showDetail(<?php echo $item['id']; ?>)"><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></a></h3>
+                                    <p><?php echo $item['desc']; ?></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary add-item-button" type="button" onclick="addItemToOrder(<?php echo $item['id'] . ",'" . $item['title'] . "'," . $item['price'] . ",'" . $item['path'] . "'"; ?>)">Add to order</button>
+                                </div>
+                            </div>
+                            <hr class="menuItemRow<?php echo $item['id']; ?>">
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" id="headingFour" role="tab">
+                    <h4 class="panel-title"><a aria-controls="collapseFive" aria-expanded="false" class="collapsed" data-toggle="collapse" href="#collapseFive" role="button">Drinks</a></h4>
+                </div>
+                <div aria-expanded="false" aria-labelledby="headingFive"class="panel-collapse collapse" id="collapseFive" role="tabpanel">
+                    <div class="panel-body">
+                        <?php foreach($drinkItems as $index => $item) : ?>
+                            <div class="row menuItemRow<?php echo $item['id']; ?>">
+                                <div class="col-md-2">
+                                    <div class="thumbnail" style="background-image: url('<?php echo $item['path']; ?>');" ></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3><a onclick="showDetail(<?php echo $item['id']; ?>)"><?php echo $item['title']; ?> - $<?php echo $item['price']; ?></a></h3>
                                     <p><?php echo $item['desc']; ?></p>
                                 </div>
                                 <div class="col-md-4">

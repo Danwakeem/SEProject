@@ -63,17 +63,8 @@
 
   <div class="form-group">
     <label for="ingred">Ingredients</label>
-    <label for="ingred">separated by a ,</label>
-    <input id="ingred" type="text" name="ingred" class="form-control" id="exampleInputEmail1" placeholder="beef, cheese ..."
-    <?php if($results != false) {
-        foreach ($results['ingredients'] as $key => $value) {
-            if($key == count($results) - 1){
-              echo $value;
-            } else {
-              echo $value . ',';
-            }
-        }
-      } ?>
+    <label for="ingred">separated by a , with a title and an amount (Example: Cheese:10,Pepper:10)</label>
+    <input id="ingred" type="text" name="ingred" class="form-control" id="exampleInputEmail1" placeholder="beef, cheese ..." value="<?php if($results != false) {foreach ($results['ingredients'] as $key => $value) {if($key == count($results['ingredients'])+1){echo $value['ingredient'] . ':' . $value['amount'];} else {echo $value['ingredient'] . ':' . $value['amount'] . ',';}}} ?>"
     >
   </div>
 

@@ -130,8 +130,11 @@ function subscribeToMenuUpdates(){
 	pubnub.subscribe({
 		channel: 'menuUpdate',
 		message: function(e){
-			//Find menu items and remove
-			$( "#menu" ).replaceWith(e);
+			if(e == "fetch"){
+				returnToMenu();
+			} else {
+				$( "#menu" ).replaceWith(e);
+			}
 		},
 		error: function(error){
 			console.log(JSON.stringify(error));
@@ -190,6 +193,14 @@ function subscribeToTableUpdates(){
     }
     var keys = Object.keys(menuEditorItems);
     console.log(keys.length);
+}
+
+function publishMenuUpdate(){
+	pubnub.publish({
+		channel: 'menuUpdate',
+		message: "fetch",
+		callback:function(e){console.log(e);}
+	})
 }
 
 function saveMenuItemChanges(){
@@ -445,6 +456,36 @@ function addOrderItems(orderId,order,tableName,tableId){
 /*
  * Customer interactions
  */
+
+ function showDetail(id){
+ 	var data = {userAction: 'showMenuItemDetail', itemId: id};
+ 	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	$('#pageBody').html(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});
+ }
+
+ function returnToMenu(){
+ 	var data = {userAction: 'updateMenuItems'};
+ 	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	$('#pageBody').html(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});	
+ }
 
  function logoutCustomer(){
  	var data = {userAction: 'logoutCustomer'};

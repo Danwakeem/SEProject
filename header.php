@@ -46,4 +46,4 @@ if(isset($_SESSION['userType'])){
                 break;
         }
     ?>
-    <div class="container" style="margin-bottom: 40px;min-height: 700px; margin-top: 30px;">
+    <div id="pageBody" class="container" style="margin-bottom: 40px;min-height: 700px; margin-top: 30px;">
