@@ -14,7 +14,7 @@
                     <li><a class="blog-nav-item active" href="index.php">Table list</a></li>
                     <li><a class="blog-nav-item active" href="menuEditor.php">Menu Editor</a></li>
                 	<li><a class="blog-nav-item" href="tableAssigner.php">Assign Tables</a></li>
-                	<li><a class="blog-nav-item" href="reports.php">Reports</a></li>
+                	<li><a class="blog-nav-item" href="#">Reports</a></li>
                 </ul>
                 <?php if(isset($needsOrderBox)) : ?>
 	                <ul class="nav navbar-nav navbar-right">
