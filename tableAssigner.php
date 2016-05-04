@@ -19,7 +19,7 @@
 						</button>
 						<ul id="dropDownMenu<?php echo $row['id']; ?>" class="dropdown-menu status-dropdown-menu" aria-labelledby="assignedTo<?php echo$row['id'];?>">
 							<?php foreach ($waitresult as $wrow) :?>
-							<li><a onclick="assignTable(<?php echo $row['id']?>,<?php echo $wrow['id']?>, true)"><?php echo $wrow['username']?></a></li>
+							<li><a href="#" onclick="assignTable(<?php echo $row['id']?>,<?php echo $wrow['id']?>, true)"><?php echo $wrow['username']?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					
