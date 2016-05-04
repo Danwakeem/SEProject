@@ -12,7 +12,9 @@
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a class="blog-nav-item active" href="index.php">Table list</a></li>
-                	<li><a class="blog-nav-item" href="#">Hello <?php echo $_SESSION['username']; ?></a></li>
+                    <li><a class="blog-nav-item active" href="menuEditor.php">Menu Editor</a></li>
+                	<li><a class="blog-nav-item" href="tableAssigner.php">Assign Tables</a></li>
+                	<li><a class="blog-nav-item" href="reports.php">Reports</a></li>
                 </ul>
                 <?php if(isset($needsOrderBox)) : ?>
 	                <ul class="nav navbar-nav navbar-right">

@@ -1,4 +1,4 @@
-<?php
+<?php 
 	ob_start();
 	session_start();
 	require_once 'db-connect.php';
@@ -7,7 +7,7 @@
 		if(login($_GET['username'],$_GET['password'])){
 			exit(header('Location: index.php'));
 		} else {
-			exit(header('Location: login.php?error=1'));
+			exit(header('Location: login.php?customer&error=1'));
 		}
 	}
 
@@ -19,14 +19,12 @@
 		$stmt->bind_result($id,$userType);
 		$stmt->execute();
 		if($stmt->fetch()){
-			$_SESSION['userId'] = $id;
-			$_SESSION['username'] = $username;
-			$_SESSION['userType'] = $userType;
+			$_SESSION['customerId'] = $id;
+			$_SESSION['customerName'] = $username;
 			$stmt->close();
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 ?>

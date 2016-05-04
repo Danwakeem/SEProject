@@ -24,4 +24,4 @@
 		mysql_close($con);
 	}
 
-?> 
+?>
