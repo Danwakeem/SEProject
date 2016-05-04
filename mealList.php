@@ -1,5 +1,5 @@
 <?php $alt = false; $currentId = -1; ?>
-<table class="table" style="margin-top: 30px;">
+<table id="orderList" class="table" style="margin-top: 30px;">
 	<thead>
 		<tr>
 			<th>Complete</th>

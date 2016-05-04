@@ -7,11 +7,16 @@
             </div>
             <div class="collapse navbar-collapse navbar-menubuilder">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Login</a></li>
+                    <li><a href="Game/snake.php<?php if(isset($_SESSION['customerId'])) echo '?customerId=' . $_SESSION['customerId']; ?>">Play Game</a></li>
                     <li id="callButton"><a onclick="pubnubAlert(<?php echo $_SESSION['userId']; ?>,'<?php echo $_SESSION['username']; ?>','NeedAssistance')" style="cursor: pointer;">
                         <i class="fa fa-user-plus fa-lg"></i> Call Waiter
                     </a></li>
+                    <?php if(isset($_SESSION['customerId'])) : ?>
+                        <li><a href="#">Hello <?php echo $_SESSION['customerName']; ?></a></li>
+                        <li><a href="#" onclick="logoutCustomer()">Logout</a></li>
+                    <?php else : ?>
+                        <li><a href="login.php?customer">Login</a></li>
+                    <?php endif; ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">

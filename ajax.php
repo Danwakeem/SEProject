@@ -41,12 +41,42 @@
 				require_once 'menu.php';
 			}
 			break;
+		case 'getOrderList':
+			require_once 'chefDatabaseInteractions.php';
+			$results = getOrders();
+			require_once 'mealList.php';
+			break;
+		case 'getTableList':
+			require_once 'waiterDatabaseInteractions.php';
+			$result = getTableList();
+			require_once 'tableList.php';
+			break;
+
+		case 'logoutCustomer':
+			if(isset($_SESSION['customerId'])){
+				unset($_SESSION['customerId']);
+				unset($_SESSION['customerName']);
+			}
+			require_once 'customerDatabaseInteractions.php';
+			$orderExists = existingOrder();
+			require_once 'customerNav.php';
+			break;
+
+		case 'wonCoupon':
+			require_once 'customerDatabaseInteractions.php';
+			$customerId = $_POST['customerId'];
+			echo setCouponStatus($customerId);
+			break;
 		case 'updateOrderStatus':
 			require_once 'generalDatabaseInteractions.php';
 			if(isset($_POST['status']) && isset($_POST['orderId'])){
 				$orderId = $_POST['orderId'];
 				$status = $_POST['status'];
 				$updateStatus = updateOrderStatus($orderId,$status);
+				if(isset($_SESSION['customerId'])) {
+					require_once 'customerDatabaseInteractions.php';
+					setCouponStatus($_SESSION['customerId'],false);
+				}
 				echo $updateStatus;
 			} else {
 				echo false;

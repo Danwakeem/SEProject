@@ -1,3 +1,4 @@
+<div id="tableList">
 <?php while($row = $result->fetch_assoc()): ?>
 	<?php 
 		if($row['Status'] == "NeedAssistance") {
@@ -98,3 +99,4 @@
         </div>
 
 <?php endwhile; ?>
+</div>

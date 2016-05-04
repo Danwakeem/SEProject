@@ -10,6 +10,11 @@
 		$waiter = true;
 	}
 
+    $discount = 0.5;
+    $hasCoupon = false;
+    if(isset($_SESSION['customerId'])){
+        $hasCoupon = checkCouponStatus($_SESSION['customerId']);
+    }
 	$payInfo = getOrderItems($userId);
 	$results = $payInfo['orderItems'];
 	$singleResult;
@@ -55,8 +60,19 @@
 	</tbody>
 </table>
 
-
-<div class="row" style=" margin-bottom: 30px;">
+        <?php if($hasCoupon) :?>
+            <div class="row">
+                <div class="col-xs-8">
+                    <p><strong><i>Coupon discount</i></strong></p>
+                </div>    
+                <div class="col-xs-4">
+                    <p style="text-align: center;margin-left: 30px;">   <?php echo '-' . $sum['sum'] * $discount; ?></p>
+                </div>
+            </div>    
+            <hr>
+            <?php $sum['sum'] = $sum['sum'] - $sum['sum'] * $discount; ?>
+        <?php endif; ?>
+        <div class="row" style=" margin-bottom: 30px;">
             <div class="col-xs-8">
                 <p><strong><i>sub-total</i></strong></p>
             </div>

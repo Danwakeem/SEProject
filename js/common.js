@@ -117,6 +117,7 @@ function subscribeToWaiterUpdates(){
 			if(e.tableId === tableId){
 				$('#callButton').show();
 				$('#waiterWait').remove();
+				logoutCustomer();
 			}
 		},
 		error: function(error){
@@ -161,10 +162,11 @@ function subscribeToTableUpdates(){
 		channel: 'tableUpdate',
 		message: function(e){
 			if(userType === 'waiter') {
-				changeTableStatus(e['tableId'],e['status'],false);
+				updateTableList();
+				//changeTableStatus(e['tableId'],e['status'],false);
 			} else if (userType === 'chef' && e['status'] === 'WaitingForFood') {
-				console.log(e['orderId']);
-				addOrderItems(e['orderId'],e['order'],e['tableName'],e['tableId']);
+				updateOrderList();
+				//addOrderItems(e['orderId'],e['order'],e['tableName'],e['tableId']);
 			}
 		},
 		error: function(error){
@@ -257,6 +259,24 @@ function changeTableStatus(id,status,updateDB) {
 		updateTableUI(updateInfo,id);
 	}
 }
+<<<<<<< HEAD
+=======
+
+function updateTableList(){
+	var data = {userAction: 'getTableList'};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	$('#tableList').replaceWith(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});
+}
+>>>>>>> develop
 
 /**
  * This is the ajax call that updates the database with a new customer status
@@ -391,6 +411,23 @@ function updateOrderStatus(id,status,successFunction){
 	});	
 }
 
+function updateOrderList(){
+	var data = {userAction: 'getOrderList'};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	console.log($('#orderList'));
+		  	console.log(e);
+		  	$('#orderList').replaceWith(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});		
+}
+
 /**
  * This function adds a new order to the list view
  * @param orderId is the id associated with the order
@@ -411,6 +448,21 @@ function addOrderItems(orderId,order,tableName,tableId){
 /*
  * Customer interactions
  */
+
+ function logoutCustomer(){
+ 	var data = {userAction: 'logoutCustomer'};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	$('#custom-bootstrap-menu').replaceWith(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});		
+ }
 
  function searchAndDestroy(menuItems){
  	console.log(menuItems);
@@ -685,8 +737,11 @@ function resetOrderDropdown() {
  * Show the paybill link next to the basket
  */
 function showPayBillLink(){
-	var link = '<li id="payBillLink"><a href="payBillPage.php?tableId=' + tableId + '">Pay Bill</a></li>';
-	$('.navbar-right').append(link);
+	if($('#payBillLink').length){
+	}else {
+		var link = '<li id="payBillLink"><a href="payBillPage.php?tableId=' + tableId + '">Pay Bill</a></li>';
+		$('.navbar-right').append(link);
+	}
 }
 
 /**
