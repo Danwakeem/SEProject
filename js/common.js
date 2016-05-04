@@ -270,6 +270,8 @@ function changeTableStatus(id,status,updateDB) {
 		updateTableUI(updateInfo,id);
 	}
 }
+<<<<<<< HEAD
+=======
 
 function updateTableList(){
 	var data = {userAction: 'getTableList'};
@@ -285,6 +287,7 @@ function updateTableList(){
 		  }
 	});
 }
+>>>>>>> develop
 
 /**
  * This is the ajax call that updates the database with a new customer status
