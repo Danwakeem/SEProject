@@ -51,7 +51,11 @@
 			$result = getTableList();
 			require_once 'tableList.php';
 			break;
-
+		case 'getMasterTableList':
+			require_once 'managerDatabaseInteractions.php';
+			$result = getMasterTableList();
+			require_once 'tableList.php';
+			break;
 		case 'logoutCustomer':
 			if(isset($_SESSION['customerId'])){
 				unset($_SESSION['customerId']);

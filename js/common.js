@@ -170,6 +170,8 @@ function subscribeToTableUpdates(){
 			} else if (userType === 'chef' && e['status'] === 'WaitingForFood') {
 				updateOrderList();
 				//addOrderItems(e['orderId'],e['order'],e['tableName'],e['tableId']);
+			} else if(userType == 'manager') {
+				updateMasterTableList();
 			}
 		},
 		error: function(error){
@@ -183,6 +185,20 @@ function subscribeToTableUpdates(){
 /*
  * Manager interactions
  */
+ function updateMasterTableList(){
+ 	var data = {userAction: 'getMasterTableList'};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	$('#tableList').replaceWith(e);
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});
+ }
 
  function checkBoxChange(el) {
  	var id = $(el).attr('data');

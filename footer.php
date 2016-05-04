@@ -37,6 +37,14 @@
             });
         </script>
     <?php endif; ?>
+    <?php if($userType == 'manager') : ?>
+        <script>
+        var userType = 'manager';
+        $(document).ready(function(){
+            subscribeToTableUpdates();
+        });
+        </script>
+    <?php endif; ?>
     <?php if($userType ==  'chef') :?>
         <script>
             var userType = 'chef';
