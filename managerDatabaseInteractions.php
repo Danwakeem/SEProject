@@ -80,4 +80,28 @@
 			return $result->fetch_assoc();
 		}
 
+		function getDailyOrders(){
+ 			$con=dbConnect();
+ 			$sql = "SELECT * FROM orders 
+ 					INNER JOIN orderItems ON orders.id=orderItems.orderId INNER JOIN menuItems ON orderItems.menuId=menuItems.id INNER JOIN menuItemCategory ON menuItems.id=menuItemCategory.menuItemId INNER JOIN category ON menuItemCategory.categoryId=category.id WHERE DATE(orders.date)=CURDATE()";
+ 			$stmt = $con->prepare($sql);
+ 			$stmt->execute();
+ 			$result = $stmt->get_result();
+ 			$stmt->close();
+ 			return $result;
+ 		}
+ 		
+ 		function getPopularItems($category){
+ 			$con = dbConnect();
+ 			$sql = "SELECT menuItems.title 
+ 					FROM orders 
+ 					INNER JOIN orderItems ON orders.id=orderItems.orderId INNER JOIN menuItems ON orderItems.menuId=menuItems.id INNER JOIN menuItemCategory ON menuItems.id=menuItemCategory.menuItemId INNER JOIN category ON menuItemCategory.categoryId=category.id WHERE DATE(orders.date)=CURDATE() AND category.name=? GROUP BY menuItems.title ORDER BY COUNT(*) DESC LIMIT 3";
+			$stmt = $con->prepare($sql);
+ 			$stmt->bind_param('s',$category);
+ 			$stmt->execute();
+			$result = $stmt->get_result();
+ 			$stmt->close();
+ 			return $result;
+ 		}
+
 ?>
