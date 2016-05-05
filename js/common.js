@@ -293,11 +293,7 @@ function changeTableStatus(id,status,updateDB) {
 	if(updateDB){
 		var updateInfo = statusMessages[status];
 		var data;
-		if(userType == 'manager') {
-			var data = {userAction:'updateMasterTableList',status:status,tableId:id};
-		} else {
-			var data = {userAction:'updateTableStatus',status:status,tableId:id};
-		}
+		var data = {userAction:'updateTableStatus',status:status,tableId:id};
 		updateDBTableStatus(updateInfo,data,id);
 	} else {
 		if(userType == 'manager'){
@@ -338,6 +334,7 @@ function updateDBTableStatus(updateInfo,data,id){
 		  data: data,
 		  success: function(e){
 		  	if(e){
+		  		console.log(e);
 		  		$('#tableList').replaceWith(e);
 		  		var pubData = {tableId: id};
 		  		pubnub.publish({

@@ -119,9 +119,15 @@
 				$status = $_POST['status'];
 				$updateStatus = updateTableStatus($tableId,$status);
 			}
-			require_once 'waiterDatabaseInteractions.php';
-			$result = getTableList();
-			require_once 'tableList.php';
+			if($_SESSION['userType'] == 'waiter'){
+				require_once 'waiterDatabaseInteractions.php';
+				$result = getTableList();
+				require_once 'tableList.php';
+			} else {
+				require_once 'managerDatabaseInteractions.php';
+				$result = getMasterTableList();
+				require_once 'tableList.php';
+			}
 			break;
 		default:
 			echo false;

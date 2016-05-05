@@ -43,6 +43,7 @@
         var userType = 'manager';
         $(document).ready(function(){
             subscribeToTableUpdates();
+            subscribeToOrderUpdates();
         });
         </script>
     <?php endif; ?>
