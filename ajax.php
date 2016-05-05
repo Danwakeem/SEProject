@@ -109,10 +109,10 @@
 				$tableId = $_POST['tableId'];
 				$status = $_POST['status'];
 				$updateStatus = updateTableStatus($tableId,$status);
-				echo $updateStatus;
-			} else {
-				echo false;
 			}
+			require_once 'waiterDatabaseInteractions.php';
+			$result = getTableList();
+			require_once 'tableList.php';
 			break;
 		default:
 			echo false;

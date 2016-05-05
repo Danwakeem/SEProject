@@ -314,7 +314,7 @@ function updateDBTableStatus(updateInfo,data,id){
 		  success: function(e){
 		  	console.log(e);
 		  	if(e){
-		  		updateTableUI(updateInfo,id);
+		  		$('#tableList').replaceWith(e);
 		  		var pubData = {tableId: id};
 		  		pubnub.publish({
 					channel: 'waiterUpdate',
@@ -335,6 +335,7 @@ function updateDBTableStatus(updateInfo,data,id){
  * This function updates the view for the table whos status was updated
  * @param updateInfo is the new info to display
  * @param id is the tableId
+ * @depricated
  */
 function updateTableUI(updateInfo,id){
 	console.log("updating UI");
