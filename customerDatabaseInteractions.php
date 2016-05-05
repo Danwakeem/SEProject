@@ -69,14 +69,14 @@
 	function getOrderItems($tableId){
 		$con = dbConnect();
 		$results = [];
-		$sql = "SELECT u.username, o.id, o.tableId, oi.quantity, oi.notes, m.title, m.price from orders as o, orderItems as oi, menuItems as m, user as u where o.tableId = ? and oi.orderId = o.id and oi.menuId = m.id and u.id = o.tableId and o.status != 'Paid'";
+		$sql = "SELECT u.username, o.id, m.id as itemId, o.tableId, oi.quantity, oi.comped , oi.notes, m.title, m.price from orders as o, orderItems as oi, menuItems as m, user as u where o.tableId = ? and oi.orderId = o.id and oi.menuId = m.id and u.id = o.tableId and o.status != 'Paid'";
 		$orderItemsStmt = $con->prepare($sql);
 		$orderItemsStmt->bind_param('s', $tableId);
 		if($orderItemsStmt->execute()){
 			$orderItems = $orderItemsStmt->get_result();
 			$orderItemsStmt->close();
 			$results = array('orderItems' => $orderItems);
-			$sql = "SELECT sum(m.Price) as sum from orders as o, orderItems as oi, menuItems as m, user as u where o.tableId = ? and oi.orderId = o.id and oi.menuId = m.id and u.id = o.tableId and o.status != 'Paid'";
+			$sql = "SELECT sum(m.Price) as sum from orders as o, orderItems as oi, menuItems as m, user as u where o.tableId = ? and oi.comped != 1 and oi.orderId = o.id and oi.menuId = m.id and u.id = o.tableId and o.status != 'Paid'";
 			$priceStmt = $con->prepare($sql);
 			$priceStmt->bind_param('s',$tableId);
 			if($priceStmt->execute()){

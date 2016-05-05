@@ -5,9 +5,9 @@
 	if(isset($_GET['tableId'])){
 		$userId = $_GET['tableId'];
 	}
-	$waiter = false;
-	if(isset($_GET['waiterEdit'])){
-		$waiter = true;
+	$staff = false;
+	if(isset($_GET['staffEdit'])){
+		$staff = true;
 	}
 
     $discount = 0.5;
@@ -22,18 +22,29 @@
 	if($payInfo['orderItems']->num_rows > 0) {
 		$singleResult = get_object_vars($payInfo['orderItems']->fetch_object());
 		$sum = get_object_vars($payInfo['sum']->fetch_object());
+        if($sum['sum'] == NULL) {
+            $sum['sum'] = 0;
+        }
 	}
 
 ?>
 
-<?php if($waiter) : ?>
+<?php if($staff) : ?>
+    <script>
+        var tableId = <?php echo $userId; ?>;
+    </script>
 	<div class="row" style=" margin-top: 50px; margin-bottom: 50px;">
 		<div class="col-md-6">
 			<h1>Final Bill Summary</h1>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-3">
 			<a href="staffMenu.php?tableId=<?php echo $userId; ?>"><button type="button" class="btn btn-default" style="width:100%;">Add Menu Items</button></a>
 		</div>
+        <?php if($_SESSION['userType'] == 'manager') : ?>
+        <div class="col-md-3">
+            <a href="#" onclick="saveCompItems()"><button type="button" class="btn btn-primary" style="width:100%;">Save Changes</button></a>
+        </div>
+        <?php endif; ?>
 	</div>
 <?php else : ?>
 	<h1 style=" margin-top: 50px; margin-bottom: 50px;">Final Bill Summary</h1>
@@ -46,6 +57,7 @@
 			<th>Dish</th>
 			<th>Modifications</th>
 			<th>Price</th>
+            <th>Comped</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -55,6 +67,10 @@
 				<td><?php echo $item['title']; ?></td>
 				<td><?php echo $item['notes']; ?></td>
 				<td>$<?php echo $item['price']; ?></td>
+                <td>
+                    <div class="checkbox <?php echo $_SESSION['userType'] == 'manager' ? '' : 'disabled'; ?>" style="margin:0;">
+                        <label><input id="<?php echo $item['id']; ?>" class="compCheck" data-item="<?php $json = json_encode($item); echo htmlentities($json, ENT_QUOTES, 'UTF-8'); ?>" onclick="checkPayBillRadios(this)" type="checkbox" <?php echo $_SESSION['userType'] == 'manager' ? '' : 'disabled'; ?><?php echo $item['comped'] ? ' checked' : ''; ?>></label>
+                    </div></td>
 			</tr>
 		<?php endforeach;?>
 	</tbody>
@@ -77,7 +93,7 @@
                 <p><strong><i>sub-total</i></strong></p>
             </div>
             <div class="col-xs-4">
-                <p style="text-align: center;margin-left: 30px;"><?php echo $sum['sum']; ?></p>
+                <p id="sub-total" style="text-align: center;margin-left: 30px;"><?php echo $sum['sum']; ?></p>
             </div>
         </div>
         <hr>
@@ -128,15 +144,21 @@
             </div>
         </div>
         <hr>
-        <div class="row" style=" /* margin-bottom: 30px; */">
+        <div class="row">
             <div class="col-xs-8">
                 <p><strong><i>total</i></strong></p>
             </div>
             <div class="col-xs-4">
-                <p style="text-align: center;margin-left: 30px;"><?php echo $sum['sum']; ?></p>
+                <p id="total" style="text-align: center;margin-left: 30px;"><?php echo $sum['sum']; ?></p>
             </div>
         </div>
         <hr>
         <button class="btn btn-success" style=" width: 100%;" type="button" onclick="payBill(<?php echo $singleResult['id']; ?>)">Pay Bill</button>
+
+        <?php if($_SESSION['userType'] != 'manager') : ?>
+            <script>
+                var payBillUpdateSubscriber = true;
+            </script>
+        <?php endif; ?>
 
 <?php include 'footer.php'; ?>

@@ -53,6 +53,15 @@
 				}
 			}
 			break;
+		case 'saveCompItems':
+			require_once 'managerDatabaseInteractions.php';
+			if(isset($_POST['comp'])){
+				$compItems = $_POST['comp'];
+				//var_dump($compItems);
+				echo markItemsAsComped($compItems);
+			}
+			echo false;
+			break;
 		case 'getOrderList':
 			require_once 'chefDatabaseInteractions.php';
 			$results = getOrders();

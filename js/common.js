@@ -87,7 +87,10 @@ var newChefItem8 = '</td></tr>';
  */
 $(document).ready(function(){
 	$("[rel='tooltip']").tooltip();
-	console.log(orderItems);
+	if(typeof payBillUpdateSubscriber !== 'undefined' && payBillUpdateSubscriber){
+		subscribeToPayBillUpdates();
+		console.log('subscribed');
+	}
 });
 
 /*
@@ -104,6 +107,18 @@ var pubnub = PUBNUB.init({
         console.log('Error:', error);
     }
 });
+
+function subscribeToPayBillUpdates(){
+	pubnub.subscribe({
+		channel: 'payBillUpdate',
+		message: function(e){
+			window.location.reload(true);
+		},
+		error: function(error){
+			console.log(JSON.stringify(error));
+		}
+	});
+}
 
 /**
  * WebSocket Subscribe to waiter updates
@@ -277,11 +292,21 @@ function saveMenuItemChanges(){
 function changeTableStatus(id,status,updateDB) {
 	if(updateDB){
 		var updateInfo = statusMessages[status];
-		var data = {userAction:'updateTableStatus',status:status,tableId:id};
+		var data;
+		if(userType == 'manager') {
+			var data = {userAction:'updateMasterTableList',status:status,tableId:id};
+		} else {
+			var data = {userAction:'updateTableStatus',status:status,tableId:id};
+		}
 		updateDBTableStatus(updateInfo,data,id);
 	} else {
-		var updateInfo = statusMessages[status];
-		updateTableUI(updateInfo,id);
+		if(userType == 'manager'){
+			updateMasterTableList();
+		} else {
+			updateTableList();
+		}
+		//var updateInfo = statusMessages[status];
+		//updateTableUI(updateInfo,id);
 	}
 }
 
@@ -312,7 +337,6 @@ function updateDBTableStatus(updateInfo,data,id){
 		  type: "POST",
 		  data: data,
 		  success: function(e){
-		  	console.log(e);
 		  	if(e){
 		  		$('#tableList').replaceWith(e);
 		  		var pubData = {tableId: id};
@@ -370,6 +394,54 @@ function resetTable(id,username){
 	findByID.addClass('alert alert-info');
 	findByID.empty();
 	findByID.html('<p><strong>'+ username +'</strong> Waiting for table to order <a href="#" style="float:right;">View bill &gt;</a></p>');
+}
+
+function saveCompItems(){
+	var compItems = {};
+	var items = $('.compCheck').each(function(){
+		var itemData = $(this).data('item');
+		if($(this).is(':checked')){
+			compItems[itemData.itemId] = [itemData.id,true];
+		} else {
+			compItems[itemData.itemId] = [itemData.id,false];
+		}
+	});
+	var data = {userAction:"saveCompItems", comp:compItems};
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	console.log(e);
+		  	pubnub.publish({
+		  		channel:"payBillUpdate",
+		  		message: "updatePlease",
+				callback : function(m){console.log(m)}
+		  	});
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});
+}
+
+function checkPayBillRadios(element) {
+	var data = $(element).data('item');
+	if($(element).is(':checked')){
+		//Add
+		//compItems[data.id] = data.itemId;
+		var total = parseInt($('#sub-total').html());
+		total -= data.price;
+		$('#sub-total').html(total);
+		$('#total').html(total);
+	} else {
+		//Remove
+		//delete compItems[data.id];
+		var total = parseInt($('#sub-total').html());
+		total += data.price;
+		$('#sub-total').html(total);
+		$('#total').html(total);
+	}
 }
 
 /* End Waiter */

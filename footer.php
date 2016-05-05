@@ -22,6 +22,7 @@
 
     <?php if($userType == 'table') : ?>
         <script>
+            var userType = 'table';
             var tableId = <?php echo $_SESSION['userId']; ?>;
             var tableName = "<?php echo $_SESSION['username']; ?>";
             subscribeToWaiterUpdates();

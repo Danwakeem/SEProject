@@ -69,6 +69,25 @@
 			}
 		}
 
+		function markItemsAsComped($items) {
+			$con = dbConnect();
+			$success = true;
+			foreach ($items as $itemId => $item) {
+				$orderId = $item[0];
+				$compFlag = $item[1] == 'false' ? false : true ;
+				$sql = "UPDATE orderItems set comped = ? where orderId=? and menuId=?";
+				$stmt = $con->prepare($sql);
+				$stmt->bind_param('iis',$compFlag,$orderId,$itemId);
+				$stmt->execute();
+				$result = $stmt->affected_rows;
+				$stmt->close();
+				if($result <= 0) {
+					$success = false;
+				}
+			}
+			return $success;
+		}
+
 		function getWaiterName($id){
 			$con = dbConnect();
 			$sql = "SELECT username from user where id = ?";

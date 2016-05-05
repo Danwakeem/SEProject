@@ -92,7 +92,7 @@
 				</div>
 				<div id="viewBillCol" class="col-xs-2">
 					<?php if($row['Status'] != 'Paid' && $row['Status'] != 'Ready') : ?>
-						<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?waiterEdit&tableId=<?php echo $row['id']; ?>">View Bill ></a></p>
+						<p id="viewBillLink" class="vertical-center middle-align"><a href="payBillPage.php?staffEdit&tableId=<?php echo $row['id']; ?>">View Bill ></a></p>
 					<?php endif; ?>
 				</div>
 			</div>
