@@ -8,6 +8,21 @@ Steps to run the application on localhost
 2) Place the project in your XAMP (Or whatever you use) htdocs folder
 3) Go to localhost:8888/SEProject/index.php
 
+Login information is as follows:
+
+tables:
+   username: table[1-10]
+   password: table[1-10]
+waiter:
+   username: Dodo
+   password: password
+manager:
+   username: Manny
+   password: Manny
+chef:
+   username: Carl
+   password: Carl
+
 Here are the three URLs that will run our testing scripts:
 
 localhost:8888/SEProject/UnitTest.php
