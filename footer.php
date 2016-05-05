@@ -53,6 +53,20 @@
             });
         </script>
     <?php endif; ?>
+
+    <?php if(isset($_SESSION['sessionOrder'])) : ?>
+        <script>
+            var orderItems = <?php echo json_encode($orderItems); ?>;
+            var orderTotal = <?php echo $total; ?>;
+            var itemCount = <?php echo $numberOfItems; ?>;
+        </script>
+    <?php else : ?>
+        <script>
+            var orderItems = [];
+            var orderTotal = 0;
+            var itemCount = 0;
+        </script>
+    <?php endif; ?>
     <style>
     .tb_button {padding:1px;cursor:pointer;border-right: 1px solid #8b8b8b;border-left: 1px solid #FFF;border-bottom: 1px solid #fff;}.tb_button.hover {borer:2px outset #def; background-color: #f8f8f8 !important;}.ws_toolbar {z-index:100000} .ws_toolbar .ws_tb_btn {cursor:pointer;border:1px solid #555;padding:3px}   .tb_highlight{background-color:yellow} .tb_hide {visibility:hidden} .ws_toolbar img {padding:2px;margin:0px}
     </style>

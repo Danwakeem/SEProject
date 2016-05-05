@@ -29,6 +29,9 @@
 					echo false;
 				}
 			}
+			if(isset($_SESSION['sessionOrder'])){
+				unset($_SESSION['sessionOrder']);
+			}
 			break;
 		case 'updateMenuItems':
 			require_once 'generalDatabaseInteractions.php';
@@ -40,6 +43,15 @@
 			}
 			$results = getMenuItems(true);
 			require_once 'menu.php';
+			break;
+		case 'orderSessionSave':
+			if(isset($_POST['order'])){
+				if($_POST['order'] == 'none'){
+					unset($_SESSION['sessionOrder']);
+				} else {
+					$_SESSION['sessionOrder'] = $_POST['order'];
+				}
+			}
 			break;
 		case 'getOrderList':
 			require_once 'chefDatabaseInteractions.php';

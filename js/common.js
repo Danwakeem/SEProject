@@ -1,6 +1,3 @@
-var orderItems = [];
-var orderTotal = 0;
-var itemCount = 0;
 var editingMenu = false;
 
 var commentItemPos;
@@ -90,6 +87,7 @@ var newChefItem8 = '</td></tr>';
  */
 $(document).ready(function(){
 	$("[rel='tooltip']").tooltip();
+	console.log(orderItems);
 });
 
 /*
@@ -238,7 +236,7 @@ function saveMenuItemChanges(){
 
 		  		pubnub.publish({
 		  			channel: 'menuUpdate',
-		  			message: e,
+		  			message: "fetch",
 		  			callback:function(e){console.log(e);}
 		  		})	
 		  	} else {
@@ -648,11 +646,26 @@ function submitOrder(){
  * @return orderItem Object if found or false if not found
  */
 function inOrder(id) {
-	var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
+	//var elementPos = orderItems.map(function(x) {return x.id; }).indexOf(parseInt(id));
+	var elementPos = -1;
+	orderItems.forEach(function (obj, index) {
+		if(obj.id == id){
+			elementPos = index;
+		}
+	});
 	if(elementPos > -1)
 		return orderItems[elementPos];
 	return false;
 }
+
+var newOrderItem  = '<li id="dish'; //Dish with ID
+var newOrderItem2 = '"><div class="row" style="margin-top:10px;"><div class="col-xs-5"><a class="dropdown-col-lt">'; //Add Name 
+var newOrderItem3 = '</a></div><div class="col-xs-2"><a id="quantity" class="dropdown-col-rt edit">'; //Quantity goes here
+var newOrderItem33 = '</a></div><div class="col-xs-2"><input type="text" data="quantity" class="form-control qty-input" maxlength="2" value="'; //Quantity goes here
+var newOrderItem44 = '" onchange="updateQuantity(this)" ></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
+var newOrderItem4 = '</a></div><div class="col-xs-2 dropdown-col-rt"><a id="price" class="dropdown-col-rt">'; //Add Price 
+var newOrderItem5 = '</a></div><div class="col-xs-1"></div></div></li>';
+var newOrderItem55 = '</a></div><div class="col-xs-1 dropdown-col-rt"><a class="dropdown-col-rt" data-toggle="modal" data-target="#commentModal" onclick="commentObject(this)"><i class="fa fa-comment-o" title="Comments" rel="tooltip" title="Comments" ></i></a></div></div></li>'; 
 
 /**
  * This function updates the orderItems object and updates the view for the cart accordingly
@@ -664,7 +677,6 @@ function inOrder(id) {
 function addItemToOrder(id,title,price,path) {
 	var item = {id:id, title:title, price:price, path:path, quantity:1, notes:"N/A"};
 	var firstItem = orderItems.length === 0;
-	console.log(firstItem);
 	if(orderItems.length === 0) { 
 		$('#emptyOrder').remove(); 
 		var itemHTML = newOrderItem + id + newOrderItem2 + title + newOrderItem33 + 1 + newOrderItem44 + price + newOrderItem55;
@@ -674,6 +686,7 @@ function addItemToOrder(id,title,price,path) {
 		$('#orderDropDown').append(newItemList);
 	}
 	var data = addItemToOrderStructure(item);
+	console.log("IN LIST CHECK: " + data.inList);
 	if(data.inList === true){
 		var listItem = '#dish' + id;
 		$(listItem).find('input[data="quantity"]').val(data.item.quantity);
@@ -682,6 +695,25 @@ function addItemToOrder(id,title,price,path) {
 		$('#totalDivider').before(itemHTML);
 	}
 	updateTotalValues();
+}
+
+function saveOrderToSession(){
+	if(orderItems.length === 0){
+		var data = {userAction:"orderSessionSave", order:'none'};
+	} else {
+		var data = {userAction:"orderSessionSave", order:orderItems};
+	}
+	$.ajax({
+		  url: "ajax.php",
+		  type: "POST",
+		  data: data,
+		  success: function(e){
+		  	console.log("Order saved to session");
+		  },
+		  error: function(jqXHR, textStatus, errorThrown) {
+ 			console.log(textStatus, errorThrown);
+		  }
+	});
 }
 
 /**
@@ -704,6 +736,8 @@ function addItemToOrderStructure(item) {
 	} else {
 		orderItems.push(item);
 	}
+	//Update session variable
+	saveOrderToSession();
 	orderTotal += item.price;
 	itemCount++;
 	return returnStructure;
@@ -748,10 +782,12 @@ function updateQuantity(element) {
 	updateTotalValues();
 	if(data === true) {
 		$(par).remove();
-		if(orderItems.length === 0)
+		if(orderItems.length === 0) {
+			orderItems = [];
 			$('#orderDropDown').html('<li id="emptyOrder"><a href="#">Nothing added</a></li>');
+		}
 	}
-	console.log(orderItems);
+	saveOrderToSession();
 }
 
 function updateQuantityInStructure(id,qty) {
