@@ -11,55 +11,63 @@
 	while($row = $result->fetch_assoc()){
 		$revenue = $revenue + ($row['quantity'] * $row['Price']);
 	}
-	echo "<h1 class='page-title'>Daily Reports</h1>";
-	echo "<h1>Revenue Today: " . $revenue . "</h1>";
+	?>
+	<h1 class='page-title'>Daily Reports</h1>
+	<h3>Revenue Today: <?php echo $revenue; ?></h3>
 	
-	echo "<h1> Popular Appetizers: ";
-	while($row = $appetizers->fetch_assoc()){
-		echo $row['title'] . ", ";
-	}
-	echo "</h1>";
+	<hr>
+
+	<h3> Popular Appetizers: </h3>
+	<?php while($row = $appetizers->fetch_assoc()) : ?>
+		<?php echo $row['title']; ?>,
+	<?php endwhile; ?>
+
+	<hr>	
+
+	<h3> Popular Entrees: </h3>
+	<?php while($row = $entrees->fetch_assoc()) : ?>
+		<?php echo $row['title']; ?>,
+	<?php endwhile; ?>
+
+	<hr>
+
+	<h3> Popular Drinks: </h3>
+	<?php while($row = $drinks->fetch_assoc()) : ?>
+		<?php echo $row['title']; ?>,
+	<?php endwhile; ?>
 	
-	echo "<h1> Popular Entrees: ";
-	while($row = $entrees->fetch_assoc()){
-		echo $row['title'] . ", ";
-	}
-	echo "</h1>";
+	<hr>
+
+	<h3> Popular Desserts: </h3>
+	<?php while($row = $deserts->fetch_assoc()) : ?>
+		<?php echo $row['title']; ?>, 
+	<?php endwhile; ?>
 	
-	echo "<h1> Popular Drinks: ";
-	while($row = $drinks->fetch_assoc()){
-		echo $row['title'] . ", ";
-	}
-	echo "</h1>";
-	
-	echo "<h1> Popular Desserts: ";
-	while($row = $deserts->fetch_assoc()){
-		echo $row['title'] . ", ";
-	}
-	echo "</h1>";
-	
-	//display comped items in a table
-	echo "<h1>Today's Comped Items</h1>";
-	echo "<table border='1'>
+	<hr>
+
+	<!-- display comped items in a table -->
+	<h3>Today's Comped Items</h3>
+	<table class="table table-striped" style=" margin-top: 30px; border-bottom: 1px solid gray;">
+		<thead>
 			<tr>
 				<td>Order ID</td>
 				<td>Table ID</td>
 				<td>Item Comped</td>
 				<td>Price</td>
 				<td>Time</td>
-			</tr>";
-	while ($row = $compReport->fetch_assoc()){
-		echo "<tr>
-				<td>" . $row['OrderID'] . "</td>
-				<td>" . $row['TableID'] . "</td>
-				<td>" . $row['Item'] . "</td>
-				<td>" . $row['Price'] . "</td>
-				<td>" . $row['Time'] . "</td>
-			  </tr>";
-	}
+			</tr>
+		</thead>
+	<?php while ($row = $compReport->fetch_assoc()) : ?>
+		<tbody>
+			<tr>
+				<td><?php echo $row['OrderID']; ?></td>
+				<td><?php echo $row['TableID']; ?></td>
+				<td><?php echo $row['Item']; ?></td>
+				<td><?php echo $row['Price']; ?></td>
+				<td><?php echo $row['Time']; ?></td>
+			</tr>
+		</tbody>
+	<?php endwhile; ?>
 			
-	echo "</table>";
-		
-	
-	?>
+	</table>
 <?php include_once 'footer.php'?>
