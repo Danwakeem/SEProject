@@ -122,5 +122,15 @@
  			$stmt->close();
  			return $result;
  		}
+ 		
+ 		function getCompedItems(){
+			$con = dbConnect();
+			$sql = "SELECT orders.id OrderID, orders.tableId TableID, menuItems.title Item, menuItems.Price, TIME(orders.date) Time FROM orders INNER JOIN orderItems ON orders.id=orderItems.orderId INNER JOIN menuItems ON orderItems.menuId=menuItems.id WHERE orderItems.comped=1 AND DATE(orders.date)=CURDATE()";
+			$stmt = $con->prepare($sql);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$stmt->close();
+			return $result;
+		}
 
 ?>
