@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:8889
--- Generation Time: May 05, 2016 at 10:50 AM
+-- Generation Time: May 06, 2016 at 05:27 PM
 -- Server version: 5.5.42
 -- PHP Version: 5.6.10
 
@@ -348,7 +348,11 @@ INSERT INTO `orderItems` (`orderId`, `menuId`, `quantity`, `notes`, `comped`) VA
 (142, 1, 2, 'N/A', 1),
 (142, 9, 1, 'N/A', 1),
 (143, 1, 2, 'N/A', 0),
-(144, 1, 2, 'N/A', 0);
+(144, 1, 2, 'N/A', 1),
+(145, 1, 3, 'N/A', 1),
+(146, 1, 3, 'N/A', 0),
+(146, 9, 1, 'N/A', 1),
+(146, 13, 1, 'N/A', 0);
 
 -- --------------------------------------------------------
 
@@ -362,7 +366,7 @@ CREATE TABLE `orders` (
   `tableId` int(11) NOT NULL,
   `customerId` int(11) DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `orders`
@@ -462,7 +466,9 @@ INSERT INTO `orders` (`id`, `status`, `tableId`, `customerId`, `date`) VALUES
 (141, 'Paid', 5, NULL, '2016-05-05 06:38:46'),
 (142, 'Paid', 5, NULL, '2016-05-05 07:41:12'),
 (143, 'Paid', 5, NULL, '2016-05-05 08:49:10'),
-(144, 'InProgress', 5, NULL, '2016-05-05 08:49:42');
+(144, 'Paid', 5, NULL, '2016-05-05 08:49:42'),
+(145, 'Paid', 3, NULL, '2016-05-05 16:50:25'),
+(146, 'Paid', 3, NULL, '2016-05-06 15:10:14');
 
 -- --------------------------------------------------------
 
@@ -518,7 +524,7 @@ INSERT INTO `user` (`id`, `username`, `password`, `userType`, `Status`, `coupon`
 (2, 'Dodo', 'password', 'waiter', 'Ready', 0),
 (3, 'table1', 'table1', 'table', 'Ready', 0),
 (4, 'table2', 'table2', 'table', 'Ready', 0),
-(5, 'table3', 'table3', 'table', 'WaitingForFood', 0),
+(5, 'table3', 'table3', 'table', 'Ready', 0),
 (6, 'table4', 'table4', 'table', 'Ready', 0),
 (7, 'table5', 'table5', 'table', 'Ready', 0),
 (8, 'table6', 'table6', 'table', 'Ready', 0),
@@ -619,7 +625,7 @@ ALTER TABLE `menuItems`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=145;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=147;
 --
 -- AUTO_INCREMENT for table `pictures`
 --
